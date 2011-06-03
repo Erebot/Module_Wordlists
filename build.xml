@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project name="Erebot_Module_Wordlists" description="" default="all">
+    <property name="locales"            value=""/>
+    <property name="version"            value="0.6.0"/>
+    <property name="email"              value="clicky@erebot.net"/>
+    <property name="qa.coverage.force"  value="false"/>
+
+    <fileset dir="src/" id="sources">
+        <include name="**/*.php"/>
+    </fileset>
+
+    <fileset dir="tests/" id="tests">
+        <include name="**/*.php"/>
+        <exclude name="testenv/**/*.php"/>
+    </fileset>
+
+    <import file="buildenv/build.xml"/>
+</project>
