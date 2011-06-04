@@ -15,4 +15,6 @@
     </fileset>
 
     <import file="buildenv/build.xml"/>
+
+    <target name="extract_messages"/>
 </project>
