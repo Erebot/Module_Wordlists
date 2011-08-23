@@ -1,0 +1,2 @@
+# Dummy file so the parent directory (src/) gets added
+# to the repository (it is required by "phing tests").
