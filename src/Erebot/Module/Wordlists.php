@@ -20,7 +20,7 @@ class   Erebot_Module_Wordlists
 extends Erebot_Module_Base
 {
     /// List of registered paths where wordlists are kept.
-    static protected $_paths = NULL;
+    static protected $_paths = array();
     static protected $_cache = NULL;
     static protected $_refs  = array();
 
@@ -40,25 +40,7 @@ extends Erebot_Module_Base
      */
     public function _reload($flags)
     {
-    }
-
-    /// \copydoc Erebot_Module_Base::_unload()
-    protected function _unload()
-    {
-    }
-
-    /**
-     * Returns the names of available lists.
-     *
-     * \retval list
-     *      The names of all available lists.
-     */
-    static public function getAvailableLists()
-    {
-        if (self::$_cache)
-            return array_keys(self::$_cache);
-
-        if (self::$_paths === NULL) {
+        if (!count(self::$_paths)) {
             $base = '@data_dir@';
             // Running from the repository.
             if ($base == '@'.'data_dir'.'@') {
@@ -76,7 +58,25 @@ extends Erebot_Module_Base
                 );
             }
             self::$_paths = array(implode(DIRECTORY_SEPARATOR, $parts));
+            self::$_cache = NULL;
         }
+    }
+
+    /// \copydoc Erebot_Module_Base::_unload()
+    protected function _unload()
+    {
+    }
+
+    /**
+     * Returns the names of available lists.
+     *
+     * \retval list
+     *      The names of all available lists.
+     */
+    static public function getAvailableLists()
+    {
+        if (self::$_cache)
+            return array_keys(self::$_cache);
 
         $lists = array();
         foreach (self::$_paths as $path) {
