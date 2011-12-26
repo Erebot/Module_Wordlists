@@ -136,7 +136,7 @@ extends Erebot_Module_Base
 
         $lists = self::getAvailableLists();
         if (!in_array($list, $lists))
-            throw new Erebot_Module_Exception_BadListNameException($list);
+            throw new Erebot_Module_Wordlists_BadListNameException($list);
 
         $listObject = new Erebot_Module_Wordlists_Wordlist(
             $this,
