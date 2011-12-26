@@ -1,8 +1,8 @@
 Welcome to the documentation for Erebot_Module_Wordlists!
 =========================================================
 
-Erebot_Module_Wordlists is not a real module. Instead, this `Erebot`_
-« module » provides lists of words that can be used by other modules.
+Erebot_Module_Wordlists is a module for `Erebot`_ that provides lists of words
+for other modules.
 
 Contents:
 

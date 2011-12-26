@@ -1,5 +1,4 @@
-# utf-8
-
+# locale: fr-FR
 Arcko
 Massko
 Jungko
