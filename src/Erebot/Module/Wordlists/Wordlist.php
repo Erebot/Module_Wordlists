@@ -115,9 +115,10 @@ implements  Countable,
         $collator = new Collator(
             str_replace('-', '_', $this->_metadata['locale'])
         );
+        // -127 = U_USING_DEFAULT_WARNING
         // -128 = U_USING_FALLBACK_WARNING.
         //    0 = U_ZERO_ERROR (no error).
-        if (!in_array(intl_get_error_code(), array(-128, 0))) {
+        if (!in_array(intl_get_error_code(), array(-127, -128, 0))) {
             throw new Erebot_InvalidValueException(
                 "Invalid locale (".$this->_metadata['locale']."): ".
                 intl_get_error_message()
