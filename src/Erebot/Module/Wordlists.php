@@ -139,7 +139,10 @@ extends Erebot_Module_Base
             throw new Erebot_Module_Exception_BadListNameException($list);
 
         $listObject = new Erebot_Module_Wordlists_Wordlist(
-                            $this, $list, self::$_cache[$list]);
+            $this,
+            $list,
+            self::$_cache[$list]
+        );
 
         self::$_refs[$list] = array(
             'counter'   => 1,

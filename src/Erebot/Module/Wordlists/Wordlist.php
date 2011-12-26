@@ -36,11 +36,19 @@ implements  Countable,
 
     static protected $_validMetadata = array('locale', 'encoding');
 
-    final public function __construct(
+    public function __construct(
         Erebot_Module_Wordlists $module,
                                 $name,
                                 $file
     )
+    {
+        $this->_module  = $module;
+        $this->_name    = $name;
+        $this->_words   = $this->_parseFile($file);
+        $this->_file    = $file;
+    }
+
+    protected function _parseFile($file)
     {
         $content = file_get_contents($file);
         if ($content === FALSE)
@@ -75,7 +83,7 @@ implements  Countable,
 
         if ($encoding !== NULL) {
             if (isset($this->_metadata['encoding']) &&
-                $this->_metadata['encoding'] != $encoding) {
+                strtoupper($this->_metadata['encoding']) != $encoding) {
                 throw new Erebot_InvalidValueException(
                     "The encoding specified does not match the Byte Order Mark"
                 );
@@ -91,7 +99,7 @@ implements  Countable,
         $ok = array_walk(
             $content,
             array($this, 'normalizeWord'),
-            $this->_metadata['encoding']
+            array($this->_metadata['encoding'], $encoding)
         );
 
         if (!$ok) {
@@ -104,7 +112,9 @@ implements  Countable,
         $content = array_filter($content, array('self', 'isWord'));
 
         // Try to create a collator for the given locale.
-        $collator = new Collator(str_replace('-', '_', $this->_metadata['locale']));
+        $collator = new Collator(
+            str_replace('-', '_', $this->_metadata['locale'])
+        );
         // -128 = U_USING_FALLBACK_WARNING.
         //    0 = U_ZERO_ERROR (no error).
         if (!in_array(intl_get_error_code(), array(-128, 0))) {
@@ -118,11 +128,7 @@ implements  Countable,
         $this->_metadata['locale'] = $collator;
         // Sort the words (speeds up future lookups).
         $collator->sort($content);
-
-        $this->_module  = $module;
-        $this->_name    = $name;
-        $this->_words   = $content;
-        $this->_file    = $file;
+        return $content;
     }
 
     public function free()
@@ -155,7 +161,6 @@ implements  Countable,
 
         while ($start <= $end) {
             $middle = (int) $start + (($end - $start) / 2);
-
             $cmp = $this->_metadata['locale']->compare(
                 $offset,
                 $this->_words[$middle]
@@ -315,9 +320,11 @@ implements  Countable,
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    static public function normalizeWord(&$word, $key, $encoding)
+    static public function normalizeWord(&$word, $key, $encodings)
     {
-        $word = self::_toUTF8($word, $encoding);
+        if ($encodings[1] === NULL)
+            $word = self::_toUTF8($word, $encodings[0]);
+
         if (function_exists('mb_strtolower'))
             $word = mb_strtolower($word, 'UTF-8');
         else
@@ -343,7 +350,8 @@ implements  Countable,
      *      sequences of (alphanumeric and other) characters
      *      separated using a single space (eg. "Fo'o. B4-r_").
      */
-    static public function isWord($word) {
+    static public function isWord($word)
+    {
         if ($word === FALSE)
             return FALSE;
         return (bool) preg_match(self::WORD_FILTER, $word);
