@@ -160,7 +160,7 @@ implements  Countable,
         if (!$end)
             return FALSE;
 
-        while ($start <= $end) {
+        while ($start < $end) {
             $middle = (int) $start + (($end - $start) / 2);
             $cmp = $this->_metadata['locale']->compare(
                 $offset,
