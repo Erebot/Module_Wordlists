@@ -16,6 +16,14 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      Represents a list of words that can be iterated.
+ *
+ * \note
+ *      Wordlists are read-only objects. Any attempt to change
+ *      their content will result in an exception being thrown.
+ */
 class       Erebot_Module_Wordlists_Wordlist
 implements  Countable,
             ArrayAccess
@@ -28,14 +36,38 @@ implements  Countable,
         (?:\\ [\\p{N}\\p{L}\\-\\.\\(\\)_\']+)?  # Another such word.
         $@ux';
 
+    /// Metadata associated with this list.
     protected $_metadata = array('locale' => '');
+
+    /// Instance of Erebot_Module_Wordlists this wordlist is associated with.
     protected $_module;
+    
+    /// Name of this wordlist.
     protected $_name;
+    
+    /// An (alphabetically sorted) array of words contained in this wordlist.
     protected $_words;
+
+    /// Path to the file where this wordlists is stored.
     protected $_file;
 
+    /// A list of valid metadata types.
     static protected $_validMetadata = array('locale', 'encoding');
 
+
+    /**
+     * Constructs a new wordlist.
+     *
+     * \param Erebot_Module_Wordlists $module
+     *      A reference to the module that created this wordlist.
+     *      It will be used to release the wordlist when it is destroyed.
+     *
+     * \param string $name
+     *      Name of this wordlist.
+     *
+     * \param string $file
+     *      Path to the file where this wordlist is stored.
+     */
     public function __construct(
         Erebot_Module_Wordlists $module,
                                 $name,
@@ -48,6 +80,49 @@ implements  Countable,
         $this->_file    = $file;
     }
 
+    /**
+     * Parses the contents of a file, trying
+     * to derive a wordlist from it.
+     *
+     * \param string $file
+     *      Path to the file where the wordlist is stored.
+     *
+     * \note
+     *      You may add comments (lines beginning with a #)
+     *      in the file. Comments at the beginning of the file
+     *      play a special role. They are used to give hints
+     *      about the content of the file.
+     *      These special comments are of the form "# type: hint"
+     *      where "type" is currently one of "encoding" or "locale",
+     *      and "hint" is the actual content for that hint.
+     *      It does not matter in what order these special
+     *      comments appear in the file, as long as they appear
+     *      at the very beginning of the file (except that there
+     *      MAY be a Byte Order Mark before them).
+     *
+     * \note
+     *      This method automatically converts any word
+     *      contained in the wordlist to UTF-8.
+     *      The encoding for the input file may be specified
+     *      using either a Byte Order Mark (BOM) or a comment
+     *      at the beginning of the file, eg.:
+     *          # encoding: ISO-8859-1
+     *      By default, this method assumes the file is encoded
+     *      in UTF-8.
+     *
+     * \note
+     *      It is recommended that you add an indication on the locale
+     *      the wordlist is intended for (eg. "en-US") in the file.
+     *      You may do so by putting a comment at the beginning of the
+     *      file, eg.:
+     *          # locale: en-US
+     *      This indication is used to sort words in the wordlist in
+     *      alphabetical order, using the proper rules for that locale.
+     *
+     * \retval array
+     *      A list with the words found in the given file,
+     *      in alphabetical order. 
+     */
     protected function _parseFile($file)
     {
         $content = file_get_contents($file);
@@ -132,27 +207,59 @@ implements  Countable,
         return $content;
     }
 
+    /**
+     * Releases the current wordlist.
+     */
     public function free()
     {
         $this->_module->releaseList($this);
     }
 
+    /**
+     * Returns the name of the list.
+     *
+     * \retval string
+     *      Name of the list.
+     */
     public function getName()
     {
         return $this->_name;
     }
 
+    /**
+     * Returns the path to the file where the list
+     * is stored.
+     *
+     * \retval string
+     *      Path to the file containing the list.
+     */
     public function getFile()
     {
         return $this->_file;
     }
 
+    /**
+     * Returns the number of words in the list.
+     *
+     * \retval int
+     *      Number of words in the list.
+     */
     public function count()
     {
         return count($this->_words);
     }
 
-    public function offsetExists($offset)
+    /**
+     * Tests whether the given \b{word} exists in the list.
+     *
+     * \param string $word
+     *      Some word whose existence will be tested.
+     *
+     * \retval bool
+     *      TRUE if the given word is present in this list,
+     *      FALSE otherwise.
+     */
+    public function offsetExists($word)
     {
         // Dichotomic search using collation.
         $start = 0;
@@ -163,7 +270,7 @@ implements  Countable,
         while ($start < $end) {
             $middle = (int) $start + (($end - $start) / 2);
             $cmp = $this->_metadata['locale']->compare(
-                $offset,
+                $word,
                 $this->_words[$middle]
             );
 
@@ -180,28 +287,97 @@ implements  Countable,
         return FALSE;
     }
 
+    /**
+     * Returns the word at the given offset.
+     *
+     * \param int $offset
+     *      Offset of the word to retrieve.
+     *
+     * \retval string
+     *      The word at the given $offset.
+     */
     public function offsetGet($offset)
     {
         return $this->_words[$offset];
     }
 
+    /**
+     * Sets the word at the given offset to a new value.
+     *
+     * \param int $offset
+     *      Offset to set.
+     *
+     * \param string $value
+     *      New word for that offset.
+     *
+     * \throws Erebot_NotImplementedException
+     *      Wordlists are read-only objects.
+     *
+     * \warning
+     *      Actually, this method always throws an exception
+     *      because wordlists are read-only objects.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function offsetSet($offset, $value)
     {
         throw new Erebot_NotImplementedException();
     }
 
+    /**
+     * Removes the word at the given offset from the wordlist.
+     *
+     * \param int $offset
+     *      Offset to unset.
+     *
+     * \throws Erebot_NotImplementedException
+     *      Wordlists are read-only objects.
+     *
+     * \warning
+     *      Actually, this method always throws an exception
+     *      because wordlists are read-only objects.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function offsetUnset($offset)
     {
         throw new Erebot_NotImplementedException();
     }
 
-    public function getMetadata($data)
+    /**
+     * Returns metadata associated with the list.
+     *
+     * \param string $type
+     *      Type of metadata to return. For the time being,
+     *      the only valid types of metadata that this method
+     *      supports are "locale" and "encoding".
+     *
+     * \retval mixed
+     *      The requested metadata.
+     *
+     * \throw Erebot_NotFoundException
+     *      No metadata could be found for the given type.
+     */
+    public function getMetadata($type)
     {
-        if (!isset($this->_metadata[$data]))
+        if (!isset($this->_metadata[$type]))
             throw new Erebot_NotFoundException('No such metadata');
-        return $this->_metadata[$data];
+        return $this->_metadata[$type];
     }
 
+    /**
+     * Given some text, returns the name of its encoding,
+     * if one could be deduced from a BOM (Byte Order Mark).
+     *
+     * \param string $text
+     *      The text to analyze to try to deduce its encoding
+     *      based on a Byte Order Mark.
+     *
+     * \retval mixed
+     *      Either the name of an encoding (eg. "UTF-16BE")
+     *      if one could be deduced from a Byte Order Mark
+     *      present in the file; NULL otherwise.
+     */
     static protected function _handleBOM(&$text)
     {
         if (substr($text, 0, 3) == "\xEF\xBB\xBF") {
@@ -306,8 +482,8 @@ implements  Countable,
      * \param mixed $key
      *      This parameter is ignored.
      *
-     * \param string $encoding
-     *      Encoding of the word.
+     * \param string $encodings
+     *      Encodings that may apply to the word.
      *
      * \return
      *      This method does not return anything.

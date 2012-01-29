@@ -16,12 +16,23 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      A module that provides lists of words for other modules
+ *      to use.
+ *
+ * This is mainly useful for games and quizzes.
+ */
 class   Erebot_Module_Wordlists
 extends Erebot_Module_Base
 {
     /// List of registered paths where wordlists are kept.
     static protected $_paths = array();
+
+    /// A cache with available wordlists, based on currently registered paths.
     static protected $_cache = NULL;
+
+    /// Ref-counted cache of wordlists.
     static protected $_refs  = array();
 
     /**
@@ -62,11 +73,6 @@ extends Erebot_Module_Base
         }
     }
 
-    /// \copydoc Erebot_Module_Base::_unload()
-    protected function _unload()
-    {
-    }
-
     /**
      * Returns the names of available lists.
      *
@@ -95,6 +101,15 @@ extends Erebot_Module_Base
         return array_keys($lists);
     }
 
+    /**
+     * Registers a new path containing wordlists.
+     *
+     * \param string $path
+     *      New path to register.
+     *
+     * \return
+     *      This method does not return anything.
+     */
     static public function registerPath($path)
     {
         $path = realpath($path);
@@ -104,6 +119,16 @@ extends Erebot_Module_Base
         }
     }
 
+    /**
+     * Unregisters a path that was previously registered
+     * using Erebot_Module_Wordlists::registerPath().
+     *
+     * \param string $path
+     *      Path to unregister.
+     *
+     * \return
+     *      This method does not return anything.
+     */
     static public function unregisterPath($path)
     {
         $path   = realpath($path);
@@ -151,6 +176,16 @@ extends Erebot_Module_Base
         return new Erebot_Module_Wordlists_Proxy($listObject);
     }
 
+    /**
+     * Releases a wordlist.
+     *
+     * This decreases the reference counter associated
+     * with the list and removes it from the cache
+     * entirely when the counter reaches zero.
+     *
+     * \param Erebot_Module_Wordlists_Wordlist $list
+     *      Wordlist to release.
+     */
     public function releaseList(Erebot_Module_Wordlists_Wordlist $list)
     {
         $name = $list->getName();

@@ -16,59 +16,98 @@
     along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      Proxy class for a wordlist.
+ *
+ * This class provides the same set of methods as
+ * Erebot_Module_Wordlists_Wordlist, but prevents
+ * direct access to the wordlist itself.
+ *
+ * This was done so that a reference counting mechanism
+ * could be hacked into the regular wordlists, which is
+ * useful given the memory requirements of some wordlists.
+ */
 class       Erebot_Module_Wordlists_Proxy
 implements  Countable,
             ArrayAccess
 {
-    protected $_list;
+    /// Internal list: an instance of Erebot_Module_Wordlists_Wordlist.
+    private $_list;
 
+    /**
+     * Constructs a new proxy for some wordlist.
+     *
+     * \param Erebot_Module_Wordlists_Wordlist $list
+     *      The list this object is a proxy for.
+     */
     final public function __construct(Erebot_Module_Wordlists_Wordlist $list)
     {
         $this->_list = $list;
     }
 
+    /**
+     * Destructs the proxy, releasing the internal
+     * list in the process.
+     */
     final public function __destruct()
     {
         $this->_list->free();
     }
 
-    public function getName()
+    /**
+     * I'm not a big fan of cloning, sorry guys.
+     */
+    final public function __clone()
+    {
+        throw new Erebot_Exception('Cloning this object is forbidden!');
+    }
+
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::getName()
+    final public function getName()
     {
         return $this->_list->getName();
     }
 
-    public function getFile()
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::getFile()
+    final public function getFile()
     {
         return $this->_list->getFile();
     }
 
-    public function count()
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::count()
+    final public function count()
     {
         return count($this->_list);
     }
 
-    public function offsetGet($offset)
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetGet()
+    final public function offsetGet($offset)
     {
         return $this->_list[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetSet()
+    final public function offsetSet($offset, $value)
     {
         return $this->_list[$offset] = $value;
     }
 
-    public function offsetExists($offset)
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetExists()
+    final public function offsetExists($word)
     {
-        return isset($this->_list[$offset]);
+        return isset($this->_list[$word]);
     }
 
-    public function offsetUnset($offset)
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetUnset()
+    final public function offsetUnset($offset)
     {
         unset($this->_list[$offset]);
     }
 
-    public function getMetadata($data)
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::getMetadata()
+    final public function getMetadata($type)
     {
-        return $this->_list->getMetadata($data);
+        return $this->_list->getMetadata($type);
     }
 }
