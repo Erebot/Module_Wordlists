@@ -18,6 +18,11 @@ before_script:
     - (php -m | grep intl &> /dev/null) || (echo -e "\n\n" | sudo pecl install pecl/intl)
     - (php -m | grep intl &> /dev/null) || echo "extension_dir=`php-config --extension-dir`" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
     - (php -m | grep intl &> /dev/null) || echo "extension=intl.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+    - php --ini
+    - (php -m | grep intl &> /dev/null) || pear config-show
+    - php -m
+    - ls -l `php-config --extension-dir`
+    - cat `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"
 
 script: phpunit --bootstrap tests/testenv/bootstrap.php tests/
 
