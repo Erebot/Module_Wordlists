@@ -79,9 +79,9 @@ extends Erebot_Module_Base
      * \retval list
      *      The names of all available lists.
      */
-    static public function getAvailableLists()
+    public function getAvailableLists()
     {
-        if (self::$_cache)
+        if (self::$_cache !== NULL)
             return array_keys(self::$_cache);
 
         $lists = array();
@@ -97,8 +97,117 @@ extends Erebot_Module_Base
                 }
             }
         }
+
+        // Create a regexp pattern for the policy
+        // and filter the lists according to that policy.
+        $policy = self::_compilePolicy(
+            explode(' ', $this->parseString('policy', ''))
+        );
+        $lists = self::_filterLists($lists, $policy);
+
         self::$_cache = $lists;
         return array_keys($lists);
+    }
+
+    /**
+     * Given a list of simple patterns containing only
+     * the '?' and '*' characters as wildcards, compiles
+     * a regexp pattern matching the policy expressed by
+     * those patterns.
+     *
+     * \param array $simplePatterns
+     *      A list of simple patterns. The characters '?' and '*'
+     *      may be used as wildcards to match exactly one,
+     *      or one or more characters, respectively.
+     *      In additional, if the given pattern starts with a '!',
+     *      occurrences matching that pattern will be rejected.
+     *      Hence, array('foo', '!*'); accepts 'foo' but rejects
+     *      everything else.
+     *
+     * \retval string
+     *      A regexp pattern matching the policy.
+     *
+     * \note
+     *      The patterns are run in the same order as they
+     *      appear in the given array. Therefore, if given
+     *      something like array('!*', 'foo');, the resulting
+     *      policy will reject any string (even 'foo') because
+     *      the rejection rule matches first.
+     *
+     * \note
+     *      The default policy is to accept all entries
+     *      that did not match. If you want to reject these
+     *      instead, you must add '!*' manually as the last
+     *      pattern in the given array.
+     */
+    static protected function _compilePolicy($simplePatterns)
+    {
+        $patterns       = array();
+        $policy         = '(?:.*)'; // Default policy = accept everything.
+        $simplePatterns = array_reverse($simplePatterns);
+        foreach ($simplePatterns as $simplePattern) {
+            $simplePattern = trim($simplePattern);
+            if ($simplePattern == "" || $simplePattern == "!")
+                continue;
+
+            $negate     = FALSE;
+            if ($simplePattern[0] == "!") {
+                $simplePattern  = substr($simplePattern, 1);
+                $negate         = TRUE;
+            }
+
+            // Parse this simple pattern and create an equivalent
+            // regular expression.
+            $pattern    = "";
+            for ($i = 0, $len = strlen($simplePattern); $i < $len; $i++) {
+                $suffix = '*';
+                switch ($simplePattern[$i]) {
+                    case '?':
+                        $suffix = '';
+                        // Don't break.
+                    case '*':
+                        $pattern .= '.' . $suffix;
+                        break;
+                    default:
+                        $pattern .= preg_quote($simplePattern[$i], '/');
+                }
+            }
+
+            if ($negate)
+                $policy = '(?!'.$pattern.')'.$policy;
+            else
+                $policy = '(?:'.$pattern.'|'.$policy.')';
+        }
+
+        $policy = '/^'.$policy.'$/Si';
+        return $policy;
+    }
+
+    /**
+     * Given a mapping of wordlists' names with their path
+     * and a policy, returns the same mapping with only
+     * those entries whose name matches the policy.
+     *
+     * \param array $lists
+     *      A mapping of wordlists (indexed by their names)
+     *      to their path.
+     *
+     * \param string $policy
+     *      A policy (as a regular expression pattern).
+     *
+     * \retval array
+     *      A mapping of wordlists (indexed by their names)
+     *      to their path, contaning only those wordlists
+     *      that were allowed by the given policy.
+     */
+    static protected function _filterLists($lists, $policy)
+    {
+        $res        = array();
+        foreach ($lists as $name => $path) {
+            if ((bool) preg_match($policy, $name))
+                $res[$name] = $path;
+        }
+        return $res;
     }
 
     /**
@@ -159,7 +268,7 @@ extends Erebot_Module_Base
             );
         }
 
-        $lists = self::getAvailableLists();
+        $lists = $this->getAvailableLists();
         if (!in_array($list, $lists))
             throw new Erebot_Module_Wordlists_BadListNameException($list);
 
