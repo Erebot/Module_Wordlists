@@ -34,7 +34,7 @@ implements  Countable,
                                                 # Unicode letters/numbers plus
                                                 # some additional characters.
         (?:\\ [\\p{N}\\p{L}\\-\\.\\(\\)_\']+)?  # Another such word.
-        $@ux';
+        $@Sux';
 
     /// Metadata associated with this list.
     protected $_metadata = array('locale' => '');
@@ -53,6 +53,13 @@ implements  Countable,
 
     /// A list of valid metadata types.
     static protected $_validMetadata = array('locale', 'encoding');
+
+    static protected $_lower = NULL;
+    static protected $_mbstring;
+    static protected $_utf8_encode;
+    static protected $_iconv;
+    static protected $_recode;
+    static protected $_html_decode;
 
 
     /**
@@ -74,10 +81,23 @@ implements  Countable,
                                 $file
     )
     {
+        if (self::$_lower === NULL)
+            self::_checkFeatures();
+
         $this->_module  = $module;
         $this->_name    = $name;
         $this->_words   = $this->_parseFile($file);
         $this->_file    = $file;
+    }
+
+    static protected function _checkFeatures()
+    {
+        self::$_mbstring = function_exists('mb_strtolower');
+        self::$_utf8_encode = function_exists('utf8_encode');
+        self::$_iconv = function_exists('iconv');
+        self::$_recode = function_exists('recode');
+        self::$_html_decode = function_exists('html_entity_decode');
+        self::$_lower = (self::$_mbstring ? 'mb_strtolower' : 'strtolower');
     }
 
     /**
@@ -131,7 +151,7 @@ implements  Countable,
 
         $encoding = self::_handleBOM($content);
         if ($encoding !== NULL)
-            $content = self::_toUTF8($content, $encoding);
+            $content = self::_toUTF8($content, strtoupper($encoding));
 
         // Replaces a sequence of <whitespace><CR and/or LF><whitespace>
         // with a single linefeed (LF). This effectively removes empty lines
@@ -163,28 +183,27 @@ implements  Countable,
                     "The encoding specified does not match the Byte Order Mark"
                 );
             }
-            $this->_metadata['encoding'] = $encoding;
+            $this->_metadata['encoding'] = strtoupper($encoding);
         }
         else if (!isset($this->_metadata['encoding']))
             $this->_metadata['encoding'] = 'UTF-8';
-        $this->_metadata['encoding'] = strtoupper($this->_metadata['encoding']);
 
         // Normalize words (convert to UTF-8 and lowercase them).
-        // Things that don't look like words are replaced with FALSE.
-        $ok = array_walk(
-            $content,
-            array($this, 'normalizeWord'),
-            array($this->_metadata['encoding'], $encoding)
-        );
-
-        if (!$ok) {
-            throw new Erebot_Module_Wordlists_UnreadableFileException(
-                $file
-            );
+        if (self::$_mbstring) {
+            foreach ($content as $index => &$word) {
+                $word = mb_strtolower(
+                    self::_toUTF8($word, $this->_metadata['encoding']),
+                    'UTF-8'
+                );
+            }
         }
-
-        // Remove invalid words.
-        $content = array_filter($content, array('self', 'isWord'));
+        else {
+            foreach ($content as $index => &$word) {
+                $word = strtolower(
+                    self::_toUTF8($word, $this->_metadata['encoding'])
+                );
+            }
+        }
 
         // Try to create a collator for the given locale.
         $collator = new Collator(
@@ -202,7 +221,7 @@ implements  Countable,
         // Ignore differences in case, accents and punctuation.
         $collator->setStrength(Collator::PRIMARY);
         $this->_metadata['locale'] = $collator;
-        // Sort the words (speeds up future lookups).
+        // Sort the words (speeds up future lookups + assigns new keys).
         $collator->sort($content);
         return $content;
     }
@@ -440,27 +459,26 @@ implements  Countable,
      */
     static protected function _toUTF8($text, $from)
     {
-        if (!strcasecmp($from, 'utf-8'))
+        if ($from == 'UTF-8')
             return $text;
 
-        if (!strcasecmp($from, 'iso-8859-1') &&
-            function_exists('utf8_encode'))
+        if ($from == 'ISO-8859-1' && self::$_utf8_encode)
             return utf8_encode($text);
 
-        if (function_exists('iconv'))
+        if (self::$_iconv)
             return iconv($from, 'UTF-8//TRANSLIT', $text);
 
-        if (function_exists('recode'))
+        if (self::$_recode)
             return recode($from.'..utf-8', $text);
 
-        if (function_exists('mb_convert_encoding')) {
+        if (self::$_mbstring) {
             $subst  = mb_substitute_character('none');
             $text   = mb_convert_encoding($text, 'UTF-8', $from);
             mb_substitute_character($subst);
             return $text;
         }
 
-        if (function_exists('html_entity_decode')) {
+        if (self::$_html_decode) {
             return html_entity_decode(
                 htmlentities($text, ENT_QUOTES, $from),
                 ENT_QUOTES,
@@ -502,7 +520,7 @@ implements  Countable,
         if ($encodings[1] === NULL)
             $word = self::_toUTF8($word, $encodings[0]);
 
-        if (function_exists('mb_strtolower'))
+        if (self::$_mbstring)
             $word = mb_strtolower($word, 'UTF-8');
         else
             $word = strtolower($word);
