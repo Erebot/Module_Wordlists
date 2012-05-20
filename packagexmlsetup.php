@@ -37,5 +37,7 @@ foreach (array($package, $compatible) as $obj) {
             $obj->dependencies[$req]->package[$dep]->save();
 
     $obj->dependencies['required']->extension['intl']->save();
+    $obj->dependencies['required']->extension['pdo']->save();
+    $obj->dependencies['required']->extension['pdo_sqlite']->save();
 }
 

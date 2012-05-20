@@ -1,8 +1,0 @@
-# locale: fr-FR
-# encoding: iso-8859-15
-
-été
-# "soeur" (usually written with U+0153 instead of "oe")
-# cannot be represented using solely the ISO-8859-1 character set.
-s½ur
-où

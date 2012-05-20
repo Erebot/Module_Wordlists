@@ -1,8 +1,0 @@
-# locale: fr-FR
-# We don't specify an encoding here, because
-# UTF-8 is already the default is none is given.
-
-là
-saoûl
-épithète
-

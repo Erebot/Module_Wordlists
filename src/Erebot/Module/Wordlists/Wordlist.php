@@ -36,23 +36,69 @@ implements  Countable,
         (?:\\ [\\p{N}\\p{L}\\-\\.\\(\\)_\']+)?  # Another such word.
         $@ux';
 
+    /// Name of the list (same as the filename with extension removed).
+    const METADATA_NAME         = 'name';
+
+    /// Version of the list.
+    const METADATA_VERSION      = 'version';
+
+    /// A short description of the content of this list.
+    const METADATA_DESCRIPTION  = 'description';
+
+    /// A list with the names (and optionally emails) of this list's authors.
+    const METADATA_AUTHORS      = 'author';
+
+    /// The locale used by the words, using the ICU format (mandatory).
+    const METADATA_LOCALE       = 'locale';
+
+    /// Information on the license for this list of words.
+    const METADATA_LICENCE      = 'license';
+
+    /// Information on the license for this list of words.
+    const METADATA_LICENSE      = 'license';
+
+    /// A URL where more information/resources for this list may be found.
+    const METADATA_URL          = 'url';
+
+    /// A list of keywords associated with this list.
+    const METADATA_KEYWORDS     = 'keyword';
+
+
     /// Metadata associated with this list.
-    protected $_metadata = array('locale' => '');
+    protected $_metadata = array(
+        'name'          => NULL,
+        'version'       => NULL,
+        'description'   => NULL,
+        'author'        => array(),
+        'locale'        => NULL,
+        'license'       => NULL,
+        'url'           => NULL,
+        'keyword'       => array(),
+    );
 
     /// Instance of Erebot_Module_Wordlists this wordlist is associated with.
     protected $_module;
-    
+
     /// Name of this wordlist.
     protected $_name;
-    
-    /// An (alphabetically sorted) array of words contained in this wordlist.
-    protected $_words;
 
     /// Path to the file where this wordlists is stored.
     protected $_file;
 
-    /// A list of valid metadata types.
-    static protected $_validMetadata = array('locale', 'encoding');
+    /// Database link as a PDO handle.
+    protected $_db;
+
+    /// A collator compatible with this wordlist.
+    protected $_collator;
+
+    /// An SQL query that returns the number of words in this wordlist.
+    protected $_countQuery;
+
+    /// An SQL query to test whether some word is present in the list or not.
+    protected $_existsQuery;
+
+    /// An SQL query to return the word at a given offset.
+    protected $_getQuery;
 
 
     /**
@@ -76,118 +122,40 @@ implements  Countable,
     {
         $this->_module  = $module;
         $this->_name    = $name;
-        $this->_words   = $this->_parseFile($file);
         $this->_file    = $file;
+        $this->_parseFile($file);
     }
 
     /**
-     * Parses the contents of a file, trying
-     * to derive a wordlist from it.
+     * Parse the content of a SQLite file representing
+     * a list of words.
      *
      * \param string $file
-     *      Path to the file where the wordlist is stored.
+     *      The full path to the SQLite file containing
+     *      the list of words to use.
      *
-     * \note
-     *      You may add comments (lines beginning with a #)
-     *      in the file. Comments at the beginning of the file
-     *      play a special role. They are used to give hints
-     *      about the content of the file.
-     *      These special comments are of the form "# type: hint"
-     *      where "type" is currently one of "encoding" or "locale",
-     *      and "hint" is the actual content for that hint.
-     *      It does not matter in what order these special
-     *      comments appear in the file, as long as they appear
-     *      at the very beginning of the file (except that there
-     *      MAY be a Byte Order Mark before them).
-     *
-     * \note
-     *      This method automatically converts any word
-     *      contained in the wordlist to UTF-8.
-     *      The encoding for the input file may be specified
-     *      using either a Byte Order Mark (BOM) or a comment
-     *      at the beginning of the file, eg.:
-     *          # encoding: ISO-8859-1
-     *      By default, this method assumes the file is encoded
-     *      in UTF-8.
-     *
-     * \note
-     *      It is recommended that you add an indication on the locale
-     *      the wordlist is intended for (eg. "en-US") in the file.
-     *      You may do so by putting a comment at the beginning of the
-     *      file, eg.:
-     *          # locale: en-US
-     *      This indication is used to sort words in the wordlist in
-     *      alphabetical order, using the proper rules for that locale.
-     *
-     * \retval array
-     *      A list with the words found in the given file,
-     *      in alphabetical order. 
+     * \throw Erebot_InvalidValueException
+     *      The locale indicated in the file was invalid.
      */
     protected function _parseFile($file)
     {
-        $content = file_get_contents($file);
-        if ($content === FALSE)
-            throw new Erebot_Module_Wordlists_UnreadableFileException($file);
+        $this->_db      = new PDO("sqlite:$file");
 
-        $encoding = self::_handleBOM($content);
-        if ($encoding !== NULL)
-            $content = self::_toUTF8($content, $encoding);
-
-        // Replaces a sequence of <whitespace><CR and/or LF><whitespace>
-        // with a single linefeed (LF). This effectively removes empty lines
-        // and lines containing only whitespaces.
-        $content = preg_replace("/[ \\t\\f]*[\\r\\n]+\\s*/m", "\n", $content);
-        $content = explode("\n", $content);
-
-        while (count($content) && $content[0][0] == "#") {
-            // Remove the line and strip the leading "#".
-            $line   = (string) substr(array_shift($content), 1);
-            $pos    = strpos($line, ':');
-
-            if ($pos === FALSE)
-                break;
-
-            $key    = strtolower(trim((string) substr($line, 0, $pos)));
-            $value  = ltrim((string) substr($line, $pos + 1));
-
-            if (in_array($key, self::$_validMetadata))
-                $this->_metadata[$key] = $value;
+        foreach ($this->_db->query(
+                    'SELECT type, value '.
+                    'FROM metadata '.
+                    'ORDER BY type ASC, id ASC'
+                ) as $row) {
+            if (!array_key_exists($row['type'], $this->_metadata))
+                continue;
+            if (is_array($this->_metadata[$row['type']]))
+                $this->_metadata[$row['type']][] = $row['value'];
             else
-                ; /// @TODO: log warning about unrecognized option.
+                $this->_metadata[$row['type']] = $row['value'];
         }
-
-        if ($encoding !== NULL) {
-            if (isset($this->_metadata['encoding']) &&
-                strtoupper($this->_metadata['encoding']) != $encoding) {
-                throw new Erebot_InvalidValueException(
-                    "The encoding specified does not match the Byte Order Mark"
-                );
-            }
-            $this->_metadata['encoding'] = $encoding;
-        }
-        else if (!isset($this->_metadata['encoding']))
-            $this->_metadata['encoding'] = 'UTF-8';
-        $this->_metadata['encoding'] = strtoupper($this->_metadata['encoding']);
-
-        // Normalize words (convert to UTF-8 and lowercase them).
-        // Things that don't look like words are replaced with FALSE.
-        $ok = array_walk(
-            $content,
-            array($this, 'normalizeWord'),
-            array($this->_metadata['encoding'], $encoding)
-        );
-
-        if (!$ok) {
-            throw new Erebot_Module_Wordlists_UnreadableFileException(
-                $file
-            );
-        }
-
-        // Remove invalid words.
-        $content = array_filter($content, array('self', 'isWord'));
 
         // Try to create a collator for the given locale.
-        $collator = new Collator(
+        $this->_collator = new Collator(
             str_replace('-', '_', $this->_metadata['locale'])
         );
         // -127 = U_USING_DEFAULT_WARNING
@@ -200,11 +168,26 @@ implements  Countable,
             );
         }
         // Ignore differences in case, accents and punctuation.
-        $collator->setStrength(Collator::PRIMARY);
-        $this->_metadata['locale'] = $collator;
-        // Sort the words (speeds up future lookups).
-        $collator->sort($content);
-        return $content;
+        $this->_collator->setStrength(Collator::PRIMARY);
+
+        $this->_countQuery = $this->_db->prepare(
+            'SELECT COUNT(1) '.
+            'FROM words'
+        );
+
+        $this->_getQuery = $this->_db->prepare(
+            'SELECT value '.
+            'FROM words '.
+            'ORDER BY sortkey ASC '.
+            'LIMIT 1 OFFSET :offset'
+        );
+
+        $this->_existsQuery = $this->_db->prepare(
+            'SELECT value '.
+            'FROM words '.
+            'WHERE sortkey = :key '.
+            'LIMIT 1'
+        );
     }
 
     /**
@@ -238,6 +221,11 @@ implements  Countable,
         return $this->_file;
     }
 
+    public function getCollator()
+    {
+        return $this->_collator;
+    }
+
     /**
      * Returns the number of words in the list.
      *
@@ -246,11 +234,57 @@ implements  Countable,
      */
     public function count()
     {
-        return count($this->_words);
+        $this->_countQuery->execute();
+        $res = $this->_countQuery->fetchColumn();
+        $this->_countQuery->closeCursor();
+        return $res;
     }
 
     /**
-     * Tests whether the given \b{word} exists in the list.
+     * Real implementation of
+     * Erebot_Module_Wordlists_Wordlist::findWord().
+     *
+     * \param string $word
+     *      The word to look for.
+     *
+     * \note
+     *      This method only exists to work around
+     *      a bug in old versions of the intl extension
+     *      where spurious warnings are raised when
+     *      Collator::getSortKey() is called, even when
+     *      run in a block where error_reporting = 0.
+     *      See also PHP bug #62070.
+     */
+    protected function _findWord($word)
+    {
+        $key = $this->_collator->getSortKey($word);
+        $this->_existsQuery->execute(array(':key' => $key));
+        $res = $this->_existsQuery->fetchColumn();
+        $this->_existsQuery->closeCursor();
+        if ($res === FALSE || $res === NULL)
+            return NULL;
+        return $res;
+    }
+
+    /**
+     * Look for a word in the list.
+     *
+     * \param string $word
+     *      The word to look for.
+     *
+     * \retval mixed
+     *      If the given word was found, it is returned
+     *      as it appears in the list (this may include
+     *      case or accentuation variations).
+     *      Otherwise, NULL is returned.
+     */
+    public function findWord($word)
+    {
+        return @$this->_findWord($word);
+    }
+
+    /**
+     * Tests whether the given word exists in the list.
      *
      * \param string $word
      *      Some word whose existence will be tested.
@@ -261,30 +295,8 @@ implements  Countable,
      */
     public function offsetExists($word)
     {
-        // Dichotomic search using collation.
-        $start = 0;
-        $end = count($this->_words);
-        if (!$end)
-            return FALSE;
-
-        while ($start < $end) {
-            $middle = (int) $start + (($end - $start) / 2);
-            $cmp = $this->_metadata['locale']->compare(
-                $word,
-                $this->_words[$middle]
-            );
-
-            if ($cmp === FALSE)
-                throw new Exception('Internal error');
-
-            if (!$cmp)
-                return TRUE;
-            else if ($cmp > 0)
-                $start = $middle + 1;
-            else
-                $end = $middle;
-        }
-        return FALSE;
+        $res = (@$this->_findWord($word) !== NULL);
+        return $res;
     }
 
     /**
@@ -295,10 +307,22 @@ implements  Countable,
      *
      * \retval string
      *      The word at the given $offset.
+     *
+     * \throw Erebot_InvalidValueException
+     *      The given offset is not an integer.
      */
     public function offsetGet($offset)
     {
-        return $this->_words[$offset];
+        if (!is_int($offset))
+            throw new Erebot_InvalidValueException('An integer was expected');
+
+        $this->_getQuery->execute(array(':offset' => $offset));
+        $res = $this->_getQuery->fetchColumn();
+        $this->_getQuery->closeCursor();
+
+        if ($res == '' || $res === NULL || $res === FALSE)
+            return NULL;
+        return $res;
     }
 
     /**
@@ -348,164 +372,27 @@ implements  Countable,
      * Returns metadata associated with the list.
      *
      * \param string $type
-     *      Type of metadata to return. For the time being,
-     *      the only valid types of metadata that this method
-     *      supports are "locale" and "encoding".
+     *      Type of metadata to return. See the constants
+     *      named METADATA_* from this class for valid types.
      *
      * \retval mixed
-     *      The requested metadata.
+     *      The requested metadata. This is a string for types
+     *      that accept a single value (or NULL if the list does
+     *      not provide any value) or an array of multi-valued
+     *      types (an empty array may be returned in case the
+     *      list does not provide any value).
      *
-     * \throw Erebot_NotFoundException
-     *      No metadata could be found for the given type.
+     * \throw Erebot_InvalidValueException
+     *      The given metadata type is invalid.
      */
     public function getMetadata($type)
     {
-        if (!isset($this->_metadata[$type]))
-            throw new Erebot_NotFoundException('No such metadata');
-        return $this->_metadata[$type];
-    }
-
-    /**
-     * Given some text, returns the name of its encoding,
-     * if one could be deduced from a BOM (Byte Order Mark).
-     *
-     * \param string $text
-     *      The text to analyze to try to deduce its encoding
-     *      based on a Byte Order Mark.
-     *
-     * \retval mixed
-     *      Either the name of an encoding (eg. "UTF-16BE")
-     *      if one could be deduced from a Byte Order Mark
-     *      present in the file; NULL otherwise.
-     */
-    static protected function _handleBOM(&$text)
-    {
-        if (substr($text, 0, 3) == "\xEF\xBB\xBF") {
-            $text = (string) substr($text, 3);
-            return 'UTF-8';
-        }
-
-        $four = substr($text, 0, 4);
-        if ($four == "\x00\x00\xFF\xFE") {
-            $text = (string) substr($text, 4);
-            return "UTF-32BE";
-        }
-
-        if ($four == "\xFF\xFE\x00\x00") {
-            $text = (string) substr($text, 4);
-            return "UTF-32LE";
-        }
-
-        $two = substr($text, 0, 2);
-        if ($two == "\xFE\xFF") {
-            $text = (string) substr($text, 2);
-            return "UTF-16BE";
-        }
-
-        if ($two == "\xFF\xFE") {
-            $text = (string) substr($text, 2);
-            return "UTF-16LE";
-        }
-
-        // This is some other 8-byte based character set.
-        return NULL;
-    }
-
-    /**
-     * Encodes some text in UTF-8.
-     *
-     * \param string $text
-     *      Text to encode in UTF-8.
-     *
-     * \param string $from
-     *      (optional) The text's current encoding.
-     *
-     * \retval string
-     *      The text, encoded in UTF-8 or returned
-     *      without any modification in case no
-     *      mechanism could be found to change
-     *      the text's encoding.
-     *
-     * \note
-     *      This method has been duplicated from Erebot_Utils
-     *      as we need a way to convert some random text to UTF-8
-     *      without depending on Erebot's inner workings.
-     *
-     * \warning
-     *      Contrary to Erebot's method, this method does not
-     *      throw an exception when the given text could not
-     *      be encoded in UTF-8 (because no mechanism could be
-     *      found to do so). Instead, the text is returned
-     *      unchanged.
-     */
-    static protected function _toUTF8($text, $from)
-    {
-        if (!strcasecmp($from, 'utf-8'))
-            return $text;
-
-        if (!strcasecmp($from, 'iso-8859-1') &&
-            function_exists('utf8_encode'))
-            return utf8_encode($text);
-
-        if (function_exists('iconv'))
-            return iconv($from, 'UTF-8//TRANSLIT', $text);
-
-        if (function_exists('recode'))
-            return recode($from.'..utf-8', $text);
-
-        if (function_exists('mb_convert_encoding')) {
-            $subst  = mb_substitute_character('none');
-            $text   = mb_convert_encoding($text, 'UTF-8', $from);
-            mb_substitute_character($subst);
-            return $text;
-        }
-
-        if (function_exists('html_entity_decode')) {
-            return html_entity_decode(
-                htmlentities($text, ENT_QUOTES, $from),
-                ENT_QUOTES,
-                'UTF-8'
+        if (!array_key_exists($type, $this->_metadata)) {
+            throw new Erebot_InvalidValueException(
+                'Invalid metadata type "' . $type . '"'
             );
         }
-
-        throw new Erebot_NotImplementedException(
-            "No way to do UTF-8 conversions"
-        );
-    }
-
-    /**
-     * Normalizes a word.
-     *
-     * \param string $word
-     *      Word to normalize.
-     *
-     * \param mixed $key
-     *      This parameter is ignored.
-     *
-     * \param string $encodings
-     *      Encodings that may apply to the word.
-     *
-     * \return
-     *      This method does not return anything.
-     *
-     * \warning
-     *      $word is modified in place.
-     *
-     * \note
-     *      This method's prototype is compatible
-     *      with array_filter()'s expectations.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    static public function normalizeWord(&$word, $key, $encodings)
-    {
-        if ($encodings[1] === NULL)
-            $word = self::_toUTF8($word, $encodings[0]);
-
-        if (function_exists('mb_strtolower'))
-            $word = mb_strtolower($word, 'UTF-8');
-        else
-            $word = strtolower($word);
+        return $this->_metadata[$type];
     }
 
      /**
@@ -525,11 +412,11 @@ implements  Countable,
      *      This method uses a rather broad definition
      *      of what is a word. In particular, it accepts
      *      sequences of (alphanumeric and other) characters
-     *      separated using a single space (eg. "Fo'o. B4-r_").
+     *      separated by a single space (eg. "Fo'o. B4-r_").
      */
     static public function isWord($word)
     {
-        if ($word === FALSE)
+        if (!is_string($word))
             return FALSE;
         return (bool) preg_match(self::WORD_FILTER, $word);
     }
