@@ -139,13 +139,13 @@ implements  Countable,
      */
     protected function _parseFile($file)
     {
-        $this->_db      = new PDO("sqlite:$file");
-
-        foreach ($this->_db->query(
-                    'SELECT type, value '.
-                    'FROM metadata '.
-                    'ORDER BY type ASC, id ASC'
-                ) as $row) {
+        $this->_db  = new PDO("sqlite:$file");
+        $metadata   = $this->_db->query(
+            'SELECT type, value '.
+            'FROM metadata '.
+            'ORDER BY type ASC, id ASC'
+        );
+        foreach ($metadata as $row) {
             if (!array_key_exists($row['type'], $this->_metadata))
                 continue;
             if (is_array($this->_metadata[$row['type']]))
