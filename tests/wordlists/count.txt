@@ -1,0 +1,16 @@
+# name: count
+# version: 1.0
+# locale: fr-FR
+# author: Clicky
+# author: test
+# description: Test data.
+# license: GPLv3
+# url: https://erebot.net/
+# keyword: test
+# keyword: data
+
+Là
+saoûl
+épithète
+cœur
+

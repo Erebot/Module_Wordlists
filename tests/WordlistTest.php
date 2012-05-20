@@ -24,7 +24,7 @@ extends Erebot_Module_Wordlists_Wordlist
         $this->_file    = $file;
         $this->_name    =
         $this->_module  = NULL;
-        $this->_words   = $this->_parseFile($file);
+        $this->_parseFile($file);
     }
 }
 
@@ -49,136 +49,51 @@ extends PHPUnit_Framework_TestCase
                         DIRECTORY_SEPARATOR;
     }
 
-    public function test_ISO_8859_1()
+    public function testWordlist()
     {
-        $list   = new WordlistHelper($this->_base . 'iso-8859-1.txt');
-        $total  = count($list);
-        $this->assertEquals(3, $total);
-        // The encoding must have been picked up by the class.
-        $this->assertEquals('ISO-8859-1', $list->getMetadata('encoding'));
+        $list   = new WordlistHelper($this->_base . 'count.sqlite');
 
-        // Expected words, encoded using UTF-8.
-        $expected = array(
-            // ça
-            self::U_LATIN_SMALL_LETTER_C_WITH_CEDILLA . "a",
-            // ouïe
-            "ou" . self::U_LATIN_SMALL_LETTER_I_WITH_DIAERESIS . "e",
-            // père
-            "p" . self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . "re",
+        // Check words count.
+        $total  = count($list);
+        $this->assertEquals(4, $total);
+
+        // Check wordlist metadata.
+        $metadata = array(
+            WordlistHelper::METADATA_NAME           => 'count',
+            WordlistHelper::METADATA_VERSION        => '1.0',
+            WordlistHelper::METADATA_DESCRIPTION    => 'Test data.',
+            WordlistHelper::METADATA_AUTHORS        => array('Clicky', 'test'),
+            WordlistHelper::METADATA_LOCALE         => 'fr-FR',
+            WordlistHelper::METADATA_LICENSE        => 'GPLv3',
+            WordlistHelper::METADATA_URL            => 'https://erebot.net/',
+            WordlistHelper::METADATA_KEYWORDS       => array('test', 'data'),
         );
-        for ($i = 0; $i < $total; $i++)
-            $this->assertEquals($expected[$i], $list[$i]);
-    }
+        foreach ($metadata as $type => $value)
+            $this->assertEquals($value, $list->getMetadata($type));
 
-    public function test_ISO_8859_15()
-    {
-        $list   = new WordlistHelper($this->_base . 'iso-8859-15.txt');
-        $total  = count($list);
-        $this->assertEquals(3, $total);
-        // The encoding must have been picked up by the class.
-        $this->assertEquals('ISO-8859-15', $list->getMetadata('encoding'));
-
-        // Expected words, encoded using UTF-8.
+        // Check the actual words (and their order).
         $expected = array(
-            // été
-            self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE . "t" .
-            self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE,
-            // où
-            "o" . self::U_LATIN_SMALL_LETTER_U_WITH_GRAVE,
-            // sœur
-            "s" . self::U_LATIN_SMALL_LIGATURE_OE . "ur",
-        );
-        for ($i = 0; $i < $total; $i++)
-            $this->assertEquals($expected[$i], $list[$i]);
-    }
-
-    public function test_UTF_8()
-    {
-        $list   = new WordlistHelper($this->_base . 'utf-8.txt');
-        $total  = count($list);
-        $this->assertEquals(3, $total);
-        // This is the default encoding.
-        $this->assertEquals('UTF-8', $list->getMetadata('encoding'));
-
-        // Expected words, encoded using UTF-8.
-        $expected = array(
+            // cœur
+            "c" . self::U_LATIN_SMALL_LIGATURE_OE . 'ur',
             // épithète
-            self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE . "pith" .
-            self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . "te",
-            // là
-            "l" . self::U_LATIN_SMALL_LETTER_A_WITH_GRAVE,
+            self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE . 'pith' .
+            self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . 'te',
+            // Là
+            'l' . self::U_LATIN_SMALL_LETTER_A_WITH_GRAVE,
             // saoûl
-            "sao" . self::U_LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX . "l",
+            'sao' . self::U_LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX . 'l',
         );
         for ($i = 0; $i < $total; $i++)
             $this->assertEquals($expected[$i], $list[$i]);
     }
 
-    public function test_UTF_16_BE()
+    public function testExistence()
     {
-        $list   = new WordlistHelper($this->_base . 'utf-16be.txt');
-        $total  = count($list);
-        $this->assertEquals(3, $total);
-        // Check automatically detected encoding (due to the BOM).
-        $this->assertEquals('UTF-16BE', $list->getMetadata('encoding'));
+        $list   = new WordlistHelper($this->_base . 'count.sqlite');
+        $words  = array('la', 'sAoUl', 'coeur', 'ÉPITHÈTE');
 
-        // Expected words, encoded using UTF-8.
-        $expected = array(
-            // balançoire
-            "balan" . self::U_LATIN_SMALL_LETTER_C_WITH_CEDILLA . "oire",
-            // dégénère
-            "d" . self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE .
-            "g" . self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE .
-            "n" . self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . "re",
-            // mère
-            "m" . self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . "re",
-        );
-        for ($i = 0; $i < $total; $i++)
-            $this->assertEquals($expected[$i], $list[$i]);
-    }
-
-    public function test_UTF_16_LE()
-    {
-        $list   = new WordlistHelper($this->_base . 'utf-16le.txt');
-        $total  = count($list);
-        $this->assertEquals(3, $total);
-        // Check automatically detected encoding (due to the BOM).
-        $this->assertEquals('UTF-16LE', $list->getMetadata('encoding'));
-
-        // Expected words, encoded using UTF-8.
-        $expected = array(
-            // ambigü
-            "ambig" . self::U_LATIN_SMALL_LETTER_U_WITH_DIARESIS,
-            // dû
-            "d" . self::U_LATIN_SMALL_LETTER_U_WITH_CIRCUMFLEX,
-            // phénomène
-            "ph" . self::U_LATIN_SMALL_LETTER_E_WITH_ACUTE .
-            "nom" . self::U_LATIN_SMALL_LETTER_E_WITH_GRAVE . "ne",
-        );
-        for ($i = 0; $i < $total; $i++)
-            $this->assertEquals($expected[$i], $list[$i]);
-    }
-
-    /**
-     * @expectedException Erebot_InvalidValueException
-     */
-    public function testBadBOM()
-    {
-        // Try to load a file whose BOM marks it as being
-        // encoded in UTF-8 while its contents says its ISO-8859-1.
-        $list = new WordlistHelper($this->_base . 'bad-BOM.txt');
-    }
-
-    public function testAccents()
-    {
-        $list = new WordlistHelper($this->_base . 'utf-8.txt');
-        // First, an exact match.
-        $word = "l" . self::U_LATIN_SMALL_LETTER_A_WITH_GRAVE;
-        $this->assertTrue(isset($list[$word]), "'là' not found");
-        // Then, make sure accents are ignored during the comparison.
-        $this->assertTrue(isset($list['la']), "Accents are not ignored");
-        // Last, make sure case is also ignored for accentuated words (LÀ).
-        $this->assertTrue(isset($list["L\xC3\x80"]), "Case is not ignored");
+        foreach ($words as $word)
+            $this->assertTrue(isset($list[$word]));
     }
 }
 

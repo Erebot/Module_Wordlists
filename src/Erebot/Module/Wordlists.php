@@ -88,8 +88,8 @@ extends Erebot_Module_Base
         foreach (self::$_paths as $path) {
             $files = scandir($path);
             foreach ($files as $file) {
-                if (substr($file, -4) == '.txt') {
-                    $name = strtolower(substr($file, 0, -4));
+                if (substr($file, -7) == '.sqlite') {
+                    $name = strtolower(substr($file, 0, -7));
                     if (isset($lists[$name]))
                         ; /// @TODO: log a warning
                     else

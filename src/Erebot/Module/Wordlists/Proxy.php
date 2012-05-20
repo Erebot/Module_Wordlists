@@ -75,10 +75,22 @@ implements  Countable,
         return $this->_list->getFile();
     }
 
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::getCollator()
+    final public function getCollator()
+    {
+        return $this->_list->getCollator();
+    }
+
     /// \copydoc Erebot_Module_Wordlists_Wordlist::count()
     final public function count()
     {
         return count($this->_list);
+    }
+
+    /// \copydoc Erebot_Module_Wordlists_Wordlist::findWord()
+    final public function findWord($word)
+    {
+        return $this->_list->findWord($word);
     }
 
     /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetGet()

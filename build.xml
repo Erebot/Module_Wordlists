@@ -12,6 +12,31 @@
         <exclude name="testenv/**/*.php"/>
     </fileset>
 
+    <target name="all" depends="release_lists,i18n" description=""/>
+    <target name="prepare_test" depends="test_lists" description=""/>
+
+    <target name="release_lists" description="">
+        <foreach param="wordlist" target="build_list">
+            <fileset dir="./" id="wordlists">
+                <include name="data/lists/*.txt"/>
+                <include name="tests/wordlists/*.txt"/>
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="test_lists" description="">
+        <foreach param="wordlist" target="build_list">
+            <fileset dir="./" id="wordlists">
+                <include name="tests/wordlists/*.txt"/>
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="build_list" description="">
+        <exec command="php scripts/wordlist_converter ${wordlist}"
+            checkreturn="true" logoutput="true" passthru="true"/>
+    </target>
+
     <import file="buildenv/build.xml"/>
 
     <target name="extract_messages"/>
