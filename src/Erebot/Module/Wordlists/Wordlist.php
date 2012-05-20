@@ -221,6 +221,13 @@ implements  Countable,
         return $this->_file;
     }
 
+    /**
+     * Returns the Collator object associated
+     * with this list.
+     *
+     * \retval Collator
+     *      Collator for this list.
+     */
     public function getCollator()
     {
         return $this->_collator;
