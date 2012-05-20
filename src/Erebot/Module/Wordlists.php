@@ -142,7 +142,6 @@ extends Erebot_Module_Base
      */
     static protected function _compilePolicy($simplePatterns)
     {
-        $patterns       = array();
         $policy         = '(?:.*)'; // Default policy = accept everything.
         $simplePatterns = array_reverse($simplePatterns);
         foreach ($simplePatterns as $simplePattern) {

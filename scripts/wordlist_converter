@@ -74,9 +74,9 @@ class Erebot_Module_Wordlists_Converter
      *      information about the content of the file.
      *      These special comments are of the form "# key: value"
      *      where "key" can be one of: "name", "version",
-     *      "description", "author", "locale", "license", "url",
-     *      "encoding" or "keyword". The "author" and "keyword"
-     *      keys may be used more than once.
+     *      "description", "author", "locale", "license", "url"
+     *      or "keyword". The "author" and "keyword" keys may
+     *      be used more than once.
      *      It does not matter in what order these special
      *      comments appear in the file, as long as they appear
      *      at the very beginning of the file (except that there
@@ -86,9 +86,7 @@ class Erebot_Module_Wordlists_Converter
      *      This method automatically converts any word
      *      contained in the wordlist to UTF-8.
      *      The encoding for the input file may be specified
-     *      using either a Byte Order Mark (BOM) or a comment
-     *      at the beginning of the file, eg.:
-     *          # encoding: ISO-8859-1
+     *      using a Byte Order Mark (BOM).
      *      By default, this method assumes the file is encoded
      *      in UTF-8.
      *
@@ -141,13 +139,6 @@ class Erebot_Module_Wordlists_Converter
 
             $key    = strtolower(trim((string) substr($line, 0, $pos)));
             $value  = ltrim((string) substr($line, $pos + 1));
-
-            if ($key == 'encoding' && $encoding !== NULL &&
-                $encoding != strtoupper($value)) {
-                throw new Erebot_InvalidValueException(
-                    "Encoding does not match Byte Order Mark"
-                );
-            }
 
             if (!array_key_exists($key, $metadata))
                 continue;
@@ -214,7 +205,7 @@ class Erebot_Module_Wordlists_Converter
 
         $res = $this->_db->exec(
             'CREATE TABLE words ('.
-                'sortkey TEXT NOT NULL COLLATE BINARY PRIMARY KEY, '.
+                'sortkey BLOB NOT NULL PRIMARY KEY, '.
                 'value TEXT NOT NULL'.
             ')'
         );
@@ -429,25 +420,19 @@ class Erebot_Module_Wordlists_Converter
      *      Text to encode in UTF-8.
      *
      * \param string $from
-     *      (optional) The text's current encoding.
+     *      The text's current encoding.
      *
      * \retval string
-     *      The text, encoded in UTF-8 or returned
-     *      without any modification in case no
-     *      mechanism could be found to change
-     *      the text's encoding.
+     *      The text, encoded in UTF-8.
      *
      * \note
      *      This method has been duplicated from Erebot_Utils
      *      as we need a way to convert some random text to UTF-8
      *      without depending on Erebot's inner workings.
      *
-     * \warning
-     *      Contrary to Erebot's method, this method does not
-     *      throw an exception when the given text could not
-     *      be encoded in UTF-8 (because no mechanism could be
-     *      found to do so). Instead, the text is returned
-     *      unchanged.
+     * \throw Erebot_NotImplementedException
+     *      No mechanism was found that could be used
+     *      to convert the given text to UTF-8.
      */
     protected function _toUTF8($text, $from)
     {
