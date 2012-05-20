@@ -127,6 +127,9 @@ class Erebot_Module_Wordlists_Converter
         if ($encoding !== NULL)
             $content = $this->_toUTF8($content, $encoding);
 
+        // Replace "\r\n" and "\r" sequences with "\n"
+        // (for compatibility with Windows and old Mac).
+        $content = str_replace(array("\r\n", "\r"), "\n", $content);
         $content = explode("\n", $content);
         while (count($content) && substr($content[0], 0, 1) == "#") {
             // Remove the line and strip the leading "#".
