@@ -19,5 +19,7 @@ before_script:
     - (php -m | grep intl &> /dev/null) || echo "extension_dir=`php-config --extension-dir`" >> `php --ini | grep "Scan for additional" | sed -e "s|.*:\s*||"`/intl.ini
     - (php -m | grep intl &> /dev/null) || echo "extension=intl.so" >> `php --ini | grep "Scan for additional" | sed -e "s|.*:\s*||"`/intl.ini
 
-script: phpunit --bootstrap tests/testenv/bootstrap.php tests/
+script:
+    - php scripts/wordlist_converter tests/wordlists/count.txt
+    - phpunit --bootstrap tests/testenv/bootstrap.php tests/
 
