@@ -22,7 +22,7 @@ extends Erebot_Module_Wordlists_Wordlist
     public function __construct($file)
     {
         $this->_file    = $file;
-        $this->_name    =
+        $this->_name    = basename($file, '.sqlite');
         $this->_module  = NULL;
         $this->_parseFile($file);
     }
