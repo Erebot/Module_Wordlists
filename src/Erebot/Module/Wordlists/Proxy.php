@@ -87,7 +87,7 @@ implements  Countable,
         return $this->_list[$offset];
     }
 
-    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetSet()
+    /// \copydoc Erebot_Module_Wordlists_Base::offsetSet()
     final public function offsetSet($offset, $value)
     {
         return $this->_list[$offset] = $value;
@@ -99,7 +99,7 @@ implements  Countable,
         return isset($this->_list[$word]);
     }
 
-    /// \copydoc Erebot_Module_Wordlists_Wordlist::offsetUnset()
+    /// \copydoc Erebot_Module_Wordlists_Base::offsetUnset()
     final public function offsetUnset($offset)
     {
         unset($this->_list[$offset]);
