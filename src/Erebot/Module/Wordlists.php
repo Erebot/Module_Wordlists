@@ -337,7 +337,8 @@ extends Erebot_Module_Base
      */
     public function releaseList(Erebot_Module_Wordlists_Wordlist $list)
     {
-        $name = $list->getName();
+        $nameType = Erebot_Module_Wordlists_Wordlist::METADATA_NAME;
+        $name = $list->getMetadata($nameType);
         if (!isset(self::$_refs[$name]))
             throw new Erebot_NotFoundException('No such list');
 

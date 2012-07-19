@@ -63,18 +63,6 @@ implements  Countable,
         throw new Erebot_Exception('Cloning this object is forbidden!');
     }
 
-    /// \copydoc Erebot_Module_Wordlists_Wordlist::getName()
-    final public function getName()
-    {
-        return $this->_list->getName();
-    }
-
-    /// \copydoc Erebot_Module_Wordlists_Wordlist::getFile()
-    final public function getFile()
-    {
-        return $this->_list->getFile();
-    }
-
     /// \copydoc Erebot_Module_Wordlists_Wordlist::getCollator()
     final public function getCollator()
     {

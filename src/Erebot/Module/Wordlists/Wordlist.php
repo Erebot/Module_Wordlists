@@ -25,19 +25,15 @@
  *      their content will result in an exception being thrown.
  */
 class       Erebot_Module_Wordlists_Wordlist
+extends     Erebot_Module_Wordlists_Base
 implements  Countable,
             ArrayAccess
 {
-    /// Pattern used to recognize (composed) "words".
-    const WORD_FILTER = '@^
-        [\\p{N}\\p{L}\\-\\.\\(\\)_\']+          # A "word", ie. a sequence of
-                                                # Unicode letters/numbers plus
-                                                # some additional characters.
-        (?:\\ [\\p{N}\\p{L}\\-\\.\\(\\)_\']+)?  # Another such word.
-        $@Sux';
-
     /// Name of the list (same as the filename with extension removed).
     const METADATA_NAME         = 'name';
+
+    /// Path to the list's file.
+    const METADATA_FILE         = 'file';
 
     /// Version of the list.
     const METADATA_VERSION      = 'version';
@@ -66,7 +62,6 @@ implements  Countable,
 
     /// Metadata associated with this list.
     protected $_metadata = array(
-        'name'          => NULL,
         'version'       => NULL,
         'description'   => NULL,
         'author'        => array(),
@@ -196,29 +191,6 @@ implements  Countable,
     public function free()
     {
         $this->_module->releaseList($this);
-    }
-
-    /**
-     * Returns the name of the list.
-     *
-     * \retval string
-     *      Name of the list.
-     */
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    /**
-     * Returns the path to the file where the list
-     * is stored.
-     *
-     * \retval string
-     *      Path to the file containing the list.
-     */
-    public function getFile()
-    {
-        return $this->_file;
     }
 
     /**
@@ -359,48 +331,6 @@ implements  Countable,
         return $res;
     }
 
-    /**
-     * Sets the word at the given offset to a new value.
-     *
-     * \param int $offset
-     *      Offset to set.
-     *
-     * \param string $value
-     *      New word for that offset.
-     *
-     * \throws Erebot_NotImplementedException
-     *      Wordlists are read-only objects.
-     *
-     * \warning
-     *      Actually, this method always throws an exception
-     *      because wordlists are read-only objects.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function offsetSet($offset, $value)
-    {
-        throw new Erebot_NotImplementedException();
-    }
-
-    /**
-     * Removes the word at the given offset from the wordlist.
-     *
-     * \param int $offset
-     *      Offset to unset.
-     *
-     * \throws Erebot_NotImplementedException
-     *      Wordlists are read-only objects.
-     *
-     * \warning
-     *      Actually, this method always throws an exception
-     *      because wordlists are read-only objects.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function offsetUnset($offset)
-    {
-        throw new Erebot_NotImplementedException();
-    }
 
     /**
      * Returns metadata associated with the list.
@@ -412,7 +342,7 @@ implements  Countable,
      * \retval mixed
      *      The requested metadata. This is a string for types
      *      that accept a single value (or NULL if the list does
-     *      not provide any value) or an array of multi-valued
+     *      not provide any value) or an array for multi-valued
      *      types (an empty array may be returned in case the
      *      list does not provide any value).
      *
@@ -421,6 +351,12 @@ implements  Countable,
      */
     public function getMetadata($type)
     {
+        // Handle special cases here: name and path to file.
+        if ($type == self::METADATA_NAME)
+            return $this->_name;
+        if ($type == self::METADATA_FILE)
+            return $this->_file;
+
         if (!array_key_exists($type, $this->_metadata)) {
             throw new Erebot_InvalidValueException(
                 'Invalid metadata type "' . $type . '"'
@@ -429,29 +365,4 @@ implements  Countable,
         return $this->_metadata[$type];
     }
 
-     /**
-     * Filters non-words out.
-     *
-     * Only texts that passed this filtering step
-     * are considered as propositions for the game.
-     *
-     * \param string $word
-     *      A possible "word" to test.
-     *
-     * \retval bool
-     *      TRUE if the given $word really is a word,
-     *      FALSE otherwise.
-     *
-     * \note
-     *      This method uses a rather broad definition
-     *      of what is a word. In particular, it accepts
-     *      sequences of (alphanumeric and other) characters
-     *      separated by a single space (eg. "Fo'o. B4-r_").
-     */
-    static public function isWord($word)
-    {
-        if (!is_string($word))
-            return FALSE;
-        return (bool) preg_match(self::WORD_FILTER, $word);
-    }
 }
