@@ -284,9 +284,15 @@ class Erebot_Module_Wordlists_Converter
             if ($word == '')
                 continue;
 
+            $key = $collator->getSortKey($word);
+            /* In intl > 3.0.0a1, the key now ends with a trailing NUL byte.
+             * We remove it for backward-compatibility with older releases. */
+            if (substr($key, -1) === "\0")
+                $key = substr($key, 0, -1);
+
             $res = $insert->execute(
                 array(
-                    ':key'      => $collator->getSortKey($word),
+                    ':key'      => $key,
                     ':value'    => $word,
                 )
             );

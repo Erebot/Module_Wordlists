@@ -261,10 +261,23 @@ implements  Countable,
      *      Collator::getSortKey() is called, even when
      *      run in a block where error_reporting = 0.
      *      See also PHP bug #62070.
+     *
+     * \warning
+     *      Causes a crash on PHP < 5.3.0 with intl <= 3.0.0a1.
+     *      Other combinations of PHP and intl are unaffected.
      */
     protected function _findWord($word)
     {
+        /* getSortKey() is buggy in versions of intl up to 3.0.0a1 (included),
+         * resulting in a crash on PHP 5.2.x with intl <= 3.0.0a1. For some
+         * obscure reason though, the crash does not occur on PHP >= 5.3.0. */
         $key = $this->_collator->getSortKey($word);
+
+        /* In intl > 3.0.0a1, the key now ends with a trailing NUL byte.
+         * We remove it for backward-compatibility with older releases. */
+        if (substr($key, -1) === "\0")
+            $key = substr($key, 0, -1);
+
         $this->_existsQuery->execute(array(':key' => $key));
         $res = $this->_existsQuery->fetchColumn();
         $this->_existsQuery->closeCursor();
@@ -284,6 +297,13 @@ implements  Countable,
      *      as it appears in the list (this may include
      *      case or accentuation variations).
      *      Otherwise, NULL is returned.
+     *
+     * \warning
+     *      Causes a crash on PHP < 5.3.0 with intl <= 3.0.0a1.
+     *      Other combinations of PHP and intl are unaffected.
+     *
+     * \see
+     *      Erebot_Module_Wordlists_Wordlist::_findWord()
      */
     public function findWord($word)
     {
@@ -299,6 +319,13 @@ implements  Countable,
      * \retval bool
      *      TRUE if the given word is present in this list,
      *      FALSE otherwise.
+     *
+     * \warning
+     *      Causes a crash on PHP < 5.3.0 with intl <= 3.0.0a1.
+     *      Other combinations of PHP and intl are unaffected.
+     *
+     * \see
+     *      Erebot_Module_Wordlists_Wordlist::_findWord()
      */
     public function offsetExists($word)
     {

@@ -87,13 +87,22 @@ extends PHPUnit_Framework_TestCase
             $this->assertEquals($expected[$i], $list[$i]);
     }
 
-    public function testExistence()
+    public function existenceProvider()
     {
-        $list   = new WordlistHelper($this->_base . 'count.sqlite');
         $words  = array('la', 'sAoUl', 'coeur', 'ÉPITHÈTE');
-
+        $args = array();
         foreach ($words as $word)
-            $this->assertTrue(isset($list[$word]));
+            $args[] = array($word);
+        return $args;
+    }
+
+    /**
+     * @dataProvider existenceProvider
+     */
+    public function testExistence($word)
+    {
+        $list = new WordlistHelper($this->_base . 'count.sqlite');
+        $this->assertTrue(isset($list[$word]));
     }
 }
 
