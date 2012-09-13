@@ -117,8 +117,20 @@ implements  Countable,
     {
         $this->_module  = $module;
         $this->_name    = $name;
-        $this->_file    = $file;
         $this->_parseFile($file);
+    }
+
+    /**
+     * Destroy the list, releasing any resource
+     * it may have used.
+     */
+    public function __destruct()
+    {
+        // For PHARs, $this->_file points to a temporary file
+        // containing a copy of the original database.
+        if (!strncasecmp(__FILE__, 'phar://', 7)) {
+            unlink($this->_file);
+        }
     }
 
     /**
@@ -134,8 +146,20 @@ implements  Countable,
      */
     protected function _parseFile($file)
     {
-        $this->_db  = new PDO("sqlite:$file");
-        $metadata   = $this->_db->query(
+        $this->_file    = $file;
+        // When running as a PHAR, copy the SQLite database
+        // to a temporary file. Required as the SQLite3 driver
+        // does not support streams (and it can"t, see #55154).
+        if (!strncasecmp(__FILE__, 'phar://', 7)) {
+            $this->_file = tempnam(
+                sys_get_temp_dir(),
+                'Erebot_Module_Wordlists'
+            );
+            copy($file, $this->_file);
+        }
+
+        $this->_db      = new PDO('sqlite:' . $this->_file);
+        $metadata       = $this->_db->query(
             'SELECT type, value '.
             'FROM metadata '.
             'ORDER BY type ASC, id ASC'
