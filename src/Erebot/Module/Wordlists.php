@@ -52,23 +52,12 @@ extends Erebot_Module_Base
     public function _reload($flags)
     {
         if (!count(self::$_paths)) {
-            $base = '@data_dir@';
-            // Running from the repository.
-            if ($base == '@'.'data_dir'.'@') {
-                $parts = array(
-                    dirname(dirname(dirname(dirname(__FILE__)))),
-                    'data',
-                    'lists',
-                );
-            }
-            else {
-                $parts = array(
-                    dirname($base . DIRECTORY_SEPARATOR),
+            self::$_paths = array(
+                Erebot_Utils::getResourcePath(
                     'Erebot_Module_Wordlists',
-                    'lists',
-                );
-            }
-            self::$_paths = array(implode(DIRECTORY_SEPARATOR, $parts));
+                    'lists'
+                )
+            );
             self::$_cache = NULL;
         }
 
