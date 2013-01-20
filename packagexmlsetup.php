@@ -18,19 +18,8 @@ $data_dir = array(
     )
 );
 
-foreach (array($package, $compatible) as $obj) {
-    // FIXME: $package needs the original filenames,
-    // while $compatible wants the logical filenames.
-    if ($obj === $compatible) {
-        $srcDir     = 'php';
-    }
-    else {
-        $srcDir     = 'src';
-    }
-
-    $obj->files["$srcDir/Erebot/Module/Wordlists.php"] = array_merge_recursive(
-        $obj->files["$srcDir/Erebot/Module/Wordlists.php"]->getArrayCopy(),
-        $data_dir
-    );
-}
+$package->files["src/Erebot/Module/Wordlists.php"] = array_merge_recursive(
+    $package->files["src/Erebot/Module/Wordlists.php"]->getArrayCopy(),
+    $data_dir
+);
 
