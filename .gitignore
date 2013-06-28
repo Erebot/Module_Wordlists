@@ -1,3 +1,5 @@
+/vendor
+
 /data/i18n/*/LC_MESSAGES/*.mo
 /data/lists/*.sqlite
 /tests/wordlists/*.sqlite
@@ -5,6 +7,7 @@
 /docs/api
 /docs/coverage
 /docs/enduser
+/docs/src/generic
 
 /*.pem
 /*.phar

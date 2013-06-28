@@ -1,5 +1,5 @@
 {
-    "name": "erebot/erebot-module-wordlists",
+    "name": "erebot/wordlists-module",
     "description": "Erebot module that provides lists of words for other modules",
     "keywords": ["Erebot", "IRC", "bot", "module"],
     "homepage": "https://github.com/Erebot/Erebot_Module_Wordlists",
@@ -20,21 +20,28 @@
     },
     "repositories": [
         {
-            "type": "pear",
-            "url": "http://pear.php.net"
+            "type": "composer",
+            "url": "http://packages.erebot.net"
         }
     ],
     "require": {
         "php": ">=5.2.2",
         "ext-PDO": "*",
         "ext-pdo_sqlite": "*",
-        "erebot/erebot-api": "*"
+        "erebot/api": "dev-master",
+        "erebot/installers": "dev-master",
+        "erebot/generic-doc": "dev-master"
+    },
+    "require-dev": {
+        "erebot/buildenv": "dev-master",
+        "erebot/testenv": "dev-master"
     },
     "autoload": {
         "psr-0": {
             "Erebot": "src/"
         }
     },
+    "bin": ["bin/wordlist-converter"],
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
