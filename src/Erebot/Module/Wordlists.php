@@ -53,10 +53,8 @@ extends Erebot_Module_Base
     {
         if (!count(self::$_paths)) {
             self::$_paths = array(
-                Erebot_Utils::getResourcePath(
-                    'Erebot_Module_Wordlists',
-                    'lists'
-                )
+                dirname(dirname(dirname(dirname(__FILE__)))) .
+                DIRECTORY_SEPARATOR . 'lists'
             );
             self::$_cache = NULL;
         }
