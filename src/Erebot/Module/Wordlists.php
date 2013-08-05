@@ -54,6 +54,7 @@ extends Erebot_Module_Base
         if (!count(self::$_paths)) {
             self::$_paths = array(
                 dirname(dirname(dirname(dirname(__FILE__)))) .
+                DIRECTORY_SEPARATOR . 'data' .
                 DIRECTORY_SEPARATOR . 'lists'
             );
             self::$_cache = NULL;
