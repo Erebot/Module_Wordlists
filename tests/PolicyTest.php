@@ -17,16 +17,16 @@
 */
 
 class   PolicyHelper
-extends Erebot_Module_Wordlists
+extends \Erebot\Module\Wordlists
 {
-    static public function compilePolicy($simplePatterns)
+    static public function publicCompilePolicy($simplePatterns)
     {
-        return self::_compilePolicy($simplePatterns);
+        return self::compilePolicy($simplePatterns);
     }
 
-    static public function filterLists($lists, $patterns)
+    static public function publicFilterLists($lists, $patterns)
     {
-        return self::_filterLists($lists, $patterns);
+        return self::filterLists($lists, $patterns);
     }
 }
 
@@ -45,7 +45,7 @@ extends Erebot_Testenv_Module_TestCase
         // The default policy should accept anything.
         $expected   = '/^(?:.*)$/Si';
 
-        $output     = $this->_module->compilePolicy($input);
+        $output     = $this->_module->publicCompilePolicy($input);
         $this->assertEquals($expected, $output);
     }
 
@@ -53,7 +53,7 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('a', '!b', 'c*', '!d*', 'e?', '!f?');
         $expected   = '/^(?:a|(?!b)(?:c.*|(?!d.*)(?:e.|(?!f.)(?:.*))))$/Si';
-        $output     = $this->_module->compilePolicy($input);
+        $output     = $this->_module->publicCompilePolicy($input);
         $this->assertEquals($expected, $output);
     }
 
@@ -61,12 +61,12 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // Default policy.
-        $policy     = $this->_module->compilePolicy(array());
+        $policy     = $this->_module->publicCompilePolicy(array());
         // The default policy is to allow everything.
         // So we expected the output to be the same as the input.
         $expected   = $input;
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 
@@ -74,11 +74,11 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // This policy rejects "qux" and allows everything else.
-        $policy     = $this->_module->compilePolicy(array('!qux'));
+        $policy     = $this->_module->publicCompilePolicy(array('!qux'));
         // We expected the output to be the same as the input.
         $expected   = $input;
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 
@@ -86,11 +86,11 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // This policy accepts everything (acts like the default one).
-        $policy     = $this->_module->compilePolicy(array('*'));
+        $policy     = $this->_module->publicCompilePolicy(array('*'));
         // We expected the output to be the same as the input.
         $expected   = $input;
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 
@@ -98,10 +98,10 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // This policy accepts "bar" but rejects everything else.
-        $policy     = $this->_module->compilePolicy(array('bar', '!*'));
+        $policy     = $this->_module->publicCompilePolicy(array('bar', '!*'));
         $expected   = array('bar' => NULL);
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 
@@ -109,10 +109,10 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // This policy accepts "bar" but rejects everything else.
-        $policy     = $this->_module->compilePolicy(array('!ba?'));
+        $policy     = $this->_module->publicCompilePolicy(array('!ba?'));
         $expected   = array('foo' => NULL);
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 
@@ -120,11 +120,10 @@ extends Erebot_Testenv_Module_TestCase
     {
         $input      = array('foo' => NULL, 'bar' => NULL, 'baz' => NULL);
         // This policy accepts "bar" but rejects everything else.
-        $policy     = $this->_module->compilePolicy(array('!*', 'foo'));
+        $policy     = $this->_module->publicCompilePolicy(array('!*', 'foo'));
         $expected   = array();
 
-        $output     = $this->_module->filterLists($input, $policy);
+        $output     = $this->_module->publicFilterLists($input, $policy);
         $this->assertEquals($expected, $output, $policy);
     }
 }
-

@@ -5,19 +5,21 @@ php:
     - 5.3
     - 5.4
     - 5.5
+    - 5.6
+    - hhvm
 
-branches:
-    only: master
+matrix:
+    allow_failures:
+        - php: hhvm
 
 notifications:
     email: false
     irc: "irc.iiens.net#Erebot"
 
 before_script:
-    - if [ "$TRAVIS_PHP_VERSION" = "5.3.3" ]; then prefer_source="--prefer-source"; else prefer_source=""; fi
     - (php -m | grep intl &> /dev/null) || pecl install pecl/intl
     - composer self-update -n
-    - composer install --dev -n $prefer_source
+    - composer install --dev -n
 
 script:
     - php bin/wordlist-converter tests/wordlists/count.txt

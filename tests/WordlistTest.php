@@ -17,14 +17,14 @@
 */
 
 class   WordlistHelper
-extends Erebot_Module_Wordlists_Wordlist
+extends \Erebot\Module\Wordlists\Wordlist
 {
     public function __construct($file)
     {
-        $this->_file    = $file;
-        $this->_name    = basename($file, '.sqlite');
-        $this->_module  = NULL;
-        $this->_parseFile($file);
+        $this->file     = $file;
+        $this->name     = basename($file, '.sqlite');
+        $this->module   = NULL;
+        $this->parseFile($file);
     }
 }
 
@@ -105,5 +105,3 @@ extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($list[$word]));
     }
 }
-
-
