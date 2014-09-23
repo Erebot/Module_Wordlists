@@ -54,7 +54,7 @@ class Wordlists extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpEn
     {
         if (!count(self::$paths)) {
             self::$paths = array(
-                dirname(dirname(dirname(__DIR__))) .
+                dirname(__DIR__) .
                 DIRECTORY_SEPARATOR . 'data' .
                 DIRECTORY_SEPARATOR . 'lists'
             );
