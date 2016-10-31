@@ -1,332 +1,426 @@
 # locale: fr-FR
-Accapareurs
-Amphitryon
-Anacoluthe
-Analphabète
-Animal
-Anthropophage
-Anthropopitèque
-Apache
-Arlequin
-Astronaute d'eau douce
-Autocrates
-Autodidactes
+accapareur
+aérolithe
+amiral de bateau-lavoir
+amphitryon
+anacoluthe
+analphabète
+analphabète diplômé
+animal
+anthracite
+anthropophage
+anthropopithèque
+apache
+apprenti-dictateur à la noix de coco
+apophtegme
+arlequin
+ascenseur
+astronaute d'eau douce
+athlète complet
+Au large !
+autocrate
+autodidacte
 Aztèques
-Bachi-Bouzouks
-Bande de brutes
-Bande de jeunes effrontés
-Bande de Ku-Klux-Klans
-Bande de rats
-Bande de voleurs
-Bande d'ectoplasmes de tonnerre de Brest
-Bande d'emplâtres
-Bandes de canaques
-Bandes de sauvages
-Bandes de zapotèques
-Bandit
-Barbares
-Bayadère de carnaval
-Boit-sans-soif
-Bougre d'amiral de bateau-lavoir
-Bougre de crème d'emplâtre à la graisse de hérisson
-Bougre de mouchard
-Bougre de petit cornichon
-Bougre de sauvage d'aérolithe de tonnerre de Brest
-Bougre d'extrait de cornichon
-Bougre d'extrait d'hydrocarbure
-Bougre d'olibrius
-Bougres de canaques
-Bougres de faux jetons à la sauce tartare
-Bougres de jets d'eau ambulants
-Bougres de malappris
-Bougres de marchands de guano
-Bougres de méchants Blancs
-Bougres de phénomènes
-Bougres de zouaves
-Bougres de zouaves d'anthropopitèques
-Bougres d'ectoplasmes à roulettes
-Bougres d'extrait de crétins des Alpes
-Bougres d'ostrogoths
-Brigand
-Brontosaures
-Brute
-Bulldozer à réaction
-Buveurs d'eau minéral
-Cachalot
-Calamité
-Canaille
+babouin
+bachi-bouzouk
+bachi-bouzouk de tonnerre de Brest
+bachi-bouzouk des Carpathes
+bande de jeunes effrontés
+bande de joyeux drilles
+bande d'ectoplasmes de tonnerre de Brest
+bande d'emplâtres
+bande d'enragés
+bande d'escrocs
+bande d'hurluberlus
+bande de bachi-bouzouks
+bande de brutes
+bande de canaques
+bande de Ku-Klux-Klans
+bande de pirates
+bande de sauvages
+bande de voleurs
+bande de zapotèques de tonnerre de Brest
+bandit
+bayadère de carnaval
+bibelot
+bibendum
+bidule
+blague, fumisterie et compagnie
+boit-sans-soif
+bombe atomique
+bon sang
+bonhomme
+bougre
+bougre d'ectoplasme à roulettes
+bougre d'ectoplasme de moule à gaufres
+bougre d'amiral de bateau-lavoir
+bougre de crème d'emplâtre à la graisse de hérisson
+bougre d'extrait de cornichon
+bougre d'extrait de crétin des Alpes
+bougre d'extrait d'hydrocarbure
+bougre de faux jeton à la sauce tartare
+bougre de méchant Blanc
+bougre de mouchard
+bougre d'olibrius
+bougre d'ostrogoth
+bougre de papou des Carpathes
+bougre de petit cornichon
+bougre de phénomène de tonnerre de Brest
+bougre de phénomène de moule à gaufres de tonnerre de Brest
+bougre de sauvage d'aérolithe de tonnerre de Brest
+bougre de zouave
+bougres de zouaves d'anthropopithèques
+brigand
+brontosaure
+brute
+bulldozer à réaction
+cachalot
+cake-walk
+calembredaine
+canaille
 Canaque
-Cannibale
-Cannibale emplumé
-Casse-pieds
-Catachrèses
-Cataclysme
-Cataplasme
-Catastrophe
-Cercopithèque
-Chauffards
-Chenapans
-Choléra
-Cloportes
-Clowns
-Coléoptères
-Coloquintes
-Concentré de moule à gaufres
-Coquins
-Cornemuses
-Cornichon
-Cornichons de zouaves de tonnerre de Brest
-Cornichons Diplômés
-Corsaire
-Coup de Jarnac
-Crème d'emplâtre à la graisse de hérisson
-Crétin de l'Himalaya
-Crétin des Alpes
-Crétin des Balkans
-Cyanure
-Cyclone
-Cyclotron
-Cyrano à 4 pattes
-Démon
-Diablesse
-Diplodocus
-Doryphores
-Dynamiteur
-Écornifleurs
-Écraseur
-Ectoplasmes
-Égoïstes
-Emplâtres
-Énergumène
-Épave
-Esclavagiste
-Escogriffe
-Escrocs
-Espèce d'anacoluthe
-Espèce d'analphabète complet
-Espèce d'analphabète diplômé
-Espèce d'anthropopitèque
-Espèce d'apprenti dictateur à la noix de coco
-Espèce de bachi-bouzouks
-Espèce de Bibendum
-Espèce de Boit-sans-soif
-Espèce de canaques
-Espèce de cannibale
-Espèce de catachrèse
-Espèce de chauffard
-Espèce de chouette mal empaillée
-Espèce de cigare volant
-Espèce de cloporte
-Espèce de cornichon
-Espèce de coupe-jarret
-Espèce de cow-boy de la route
-Espèce de cro-magnon
-Espèce de faux jeton
-Espèce de grand escogriffe
-Espèce de logarithme
-Espèce de loup-garou à la graisse de renoncule de milles tonnerre de Brest
-Espèce de marchand de guano
-Espèce de mitrailleur à bavette
-Espèce de petit analphabète
-Espèce de petite tigresse
-Espèce de phénomène
-Espèce de porc-épic mal embouché
-Espèce de projectile guidé
-Espèce de satané bazar de …
-Espèce de trafiquant de chair humaine
-Espèce de vieille marmotte
-Espèce de vieille perruche bavarde
-Espèce d'ectoplasme
-Espèce d'équilibriste
-Espèce d'iconoclaste
-Espèce d'olibrius
-Espèce d'ours mal léché
-Espèces d'anacoluthes
-Espèces de babouins
-Espèces de Bachi-bouzouks
-Espèces de Bachi-Bouzouks de tonnerre de Brest
-Espèces de Bachi-Bouzouks des Carpates
-Espèces de coloquintes à la graisse de hérisson
-Espèces de khroumirs
-Espèces de macaques
-Espèces de mérinos
-Espèces de mérinos mal peignés
-Espèces de patagons de zoulous
-Espèces de sombres brutes
-Espèces de têtes de mules
-Espèces de Vercingétorix de carnaval
-Espèces d'ectoplasmes
-Espèces d'emplâtres
-Espèces d'imitations de chameaux
-Extrait d'emplâtre
-Fichues sales bêtes
-Fieffé menteur
-Fielleux
-Filous
-Flibustier
-Flibustier de carnaval
-Folle
-Forban
-Fourbe
-Fourbi de truc
-Frères de la côte
-Froussards
-Gaillards
-Galopin
-Gangsters
-Gardes-côtes à la mie de pain
-Gargarismes
-Garnements
-Gibier de potence
-Graine de chenapan
-Graine de vaurien
-Grand escogriffe
-Grands lâches
-Gredins
-Grenouilles
-Gros pleins-de-soupe
-Grotesque polichinelle
-Gyroscope
-Hérétique
-Hors la loi
-Hurluberlu
-Hydrocarbure
-Iconoclastes
-Incas de carnaval
-Invasion barbare
-Invertébré
-Ivrogne
-Jeune chenapan
-Jeune impertinent
-Jocrisse
-Judas
-Jus de réglisse
-Lâches
-Lascars
-Lépidoptères
-Lisette
-Macaques
-Macrocéphale
-Malappris
-Malheureuse
-Malotru
+cannibale
+cannibale emplumé
+capitaine de bateau lavoir
+casse-pieds
+catachrèse
+cataplasme
+cercopithèque
+cercueil volant
+chauffard
+chenapan
+cher petit ami
+choléra
+chouette mal empaillée
+chrysanthème
+cigare volant
+cloche à fromage
+cloporte
+clown
+clysopompe
+coléoptère
+coloquinte
+coloquinte à la graisse de hérisson
+concentré de moule à gaufres
+coquin
+cornemuse
+cornichon
+cornichon de zouave de tonnerre de Brest
+cornichon diplômé
+corsaire
+coup de Trafalgar
+coupe-jarret
+cow-boy de la route
+crème d'emplâtre à la graisse de hérisson
+crétin de l'Himalaya
+crétin des Alpes
+crétin des Balkans
+commerce noir
+cromagnon
+cuistre
+cyanure
+cyclone
+cyclone ambulant
+cyclotron
+Cyrano à quatre pattes
+diable
+diable de zouave
+que le diable les emporte
+que le diable vous étripatouille
+diablesse
+Dieu soit loué
+diplodocus
+doryphore
+doux agneaux
+dynamiteur
+écornifleur
+écraseur
+Ectoplasme
+ectoplasme à roulettes
+égoïste
+emplâtre
+emplâtré à la graisse de hérisson
+empoisonneur
+encordé vous-même
+énergumène
+enfer et damnation
+enfonceur de porte ouverte
+enragé
+épouvantail
+équilibriste
+esclavagiste
+escogriffe
+escroc
+espèce de loup-garou à la graisse de renoncule de mille sabords
+espèce de porc-épic mal embouché
+espèce de mitrailleur à bavette
+entêté
+extrait d'emplâtre
+extrait d'hydrocarbure
+extrait de cornichon
+face de brute
+farceur
+fatma de prisunic
+faux frère
+faux jeton
+faux jeton à la sauce tartare
+fichue espagnolette
+fieffé menteur
+fiston
+flibustier
+flibustier de carnaval
+flûte
+forban
+fourbe
+Frère de la côte
+froussard
+llard
+galopin
+gamin
+gangster
+garde-côtes à la mie de pain
+gargarisme
+garnement
+gibier de potence
+goujat
+graine de vaurien
+graisse de hérisson
+graisse de trombone à coulisse
+grand escogriffe
+grand lâche
+gredin
+grenouille
+gros-plein-de-soupe
+grotesque polichinelle
+gyroscope
+hérétique
+hors-la-loi
+hurluberlu
+hydrocarbure
+iconoclaste
+Inca de carnaval
+individou de général de tonnerre de Brest
+invertébré
+isotope
+ivrogne
+jet d'eau ambulant
+jeune chenapan
+jeune impertinent
+jocrisse
+judas
+jus de réglisse
+Khroumir
+KRRTCHMVRTZ
+Ku Klux Klan
+Kanak
+lâche
+lascar
+lépidoptère
+logarithme
+loup-garou à la graisse de renoncule de mille tonnerres de Brest
+macaque
+macrocéphale
+malappris
+malheureux
+malheureuse
+malotru
 Mamelouk
-Manœuvre à la graisse de hérisson
-Maquignon
-Maraud
-Marchands de tapis
-Marins d'eau douce
-Maudite bête
-Mégacycle
-Mégalomane
-Mercantis
-Mercenaires
-Mille millions de mille sabords
-Mille sabords
-Mille tonnerres
-Misérable
-Misérable ectoplasme
-Misérable iconoclaste
-Misérables
-Mitrailleur à bavette
-Monstre
-Moujiks
-Moules à gaufres
-Mufles
+marchand de guano
+marchand de tapis
+marin d'eau douce
+marmotte mal réveillée
+maudite bête
+mazette
+mégacycle
+mégalomane
+mercanti
+mercenaire
+mérinos
+mérinos mal peignés
+migou de malheur
+mille milliards de mille millions de mille sabords
+mille milliards de mille sabords
+mille milliards de mille sabords de tonnerre de Brest
+mille milliards de tonnerre de Brest
+mille millions de mille milliards de mille sabords
+mille millions de mille milliards de mille sabords de tonnerre de Brest
+mille millions de mille sabords
+mille millions de mille sabords de tonnerre de Brest
+mille millions de sabords
+mille millions de tonnerres de Brest
+mille sabords
+mille tonnerres
+mille tonnerres de Brest
+misérable
+misérable ectoplasme
+misérable ver de terre
+mitrailleur à bavette
+moratorium
+moricaud
+morues dans un carton à chapeau
+mouchard
+moujik
+moule à gaufres
+moussaillon
+moussaillon de malheur
+moussaillon du diable
+mufle
+MRKRPXZKRMTFRZ
 Mussolini de carnaval
-Naufrageur
-Négriers
-Noix de coco
-Nyctalopes
-Olibrius
-Ophicléides
-Ornithorynque
-Oryctérope
-Ostrogoth
-Pacte-à-quatre
-Paltoquet
-Pantoufles
-Papou des Carpathes
-Papous
-Paranoïaque
-Parasites
-Patagons
-Patapoufs
-Patate
-Peaux rouges
-Péronnelle
-Perroquet bavard
-Petit choléra
-Phlébotomes
-Phylloxera
-Pignoufs
-Pirate
-Pirate d'eau douce
-Pirate du ciel
-Pleurnichards
-Polygraphes
-Poussières
-Profiteurs
-Protozoaires
-Pyromane
-Pyrophores
-Rabat-joie
-Rapace
-Rats
-Ravachol
-Renégat
-Rhizopodes
-Rocambole
-Sacripant
-Sajous
-Sale menteur
-Sales bêtes
-Saltimbanques
-Sapajous
-Satrape
-Sauvages
-Scélérats
-Schizophrène
-Scolopendre
-Scorpion
-Sémaphore
-Serpent
-Sinapisme
-Sinistre farceur
-Sombre oryctérope
-Soulographe
-Souris neurasthéniques
-Sous-produit d'ectoplasme
-Tas de sauvages
-Tchouck-tchouck-nougat
-Technocrate
-Terroristes
-Têtes de lard
-Tonnerre de Brest
-Topinambours
-Tortionnaires
-Traine-potence
-Traîtres
-Tricheur
-Troglodytes
-Trompe-la-mort
-Va-nu-pieds
-Vampire
-Vandale
-Végétariens
-Vermicelles
-Vermine
-Vers de terre
-Vieux farceur
-Vingt mille sabords
-Vipère
-Visigoths
-Vivisectionnistes
-Volatiles de malheur
-Voleur d'enfants
+naufrageur
+négrier
+noix de coco
+nom d'une pipe
+nyctalope
+olibrius
+ophicléide
+ornithorynque
+oryctérope
+ostrogoth
+ours mal léché
+Pachyderme
+pacte à quatre
+paltoquet
+pantoufle
+papou
+papou des Carpathes
+paranoïaque
+parasites
+Patagon
+patagon de zoulou
+patapouf
+patate
+pauvre bougre
+pauvre type
+peau-rouge
+pénultième
+père volant
+péronnelle
+vieille perruche bavarde
+perroquet déplumé
+petit choléra
+petit délicat
+petit ornithorynque
+petite tigresse
+petit vaurien
+phénomène
+phlébotome
+phylactère
+phylloxéra
+pignouf
+pirate
+pirate d'eau douce
+pirate du ciel
+plein le dos
+pleurnichard
+polichinelle
+polygraphe
+porc-épic mal embouché
+potentat
+poussière
+profiteur
+projectile guidé
+protozoaire
+pyromane
+pyrophore
+que diable
+que le grand cric me croque et me fasse avaler ma barbe
+rapace
+rat
+ravachol
+renégat
+rhizopode
+rocaille de tonnerre de Brest
+rocambole
+sacré mitrailleur à bavette
+sacripant
+sajou
+sale bête
+saleté d'appareil à sous
+sale vilaine bête de tonnerre de Brest
+saltimbanque
+sapajou
+sapristi
+satanée fusée de tonnerre de Brest
+satanée marche
+satanée fenêtre
+satrape
+sauvage
+sauvage d'aérolithe
+scélérat
+schizophrène
+scolopendre
+scorpion
+serpent
+simili-Martien à la graisse de cabestan
+sinapisme
+sinistre farceur
+sombre brute
+sombre oryctérope
+soulographe
+sous-produit d'ectoplasme
+tas de cornichons
+tas de sauvages
+tchouk-tchouk-nougat
+technocrate
+terroriste
+tête de lard
+tête de mule
+têtu comme une mule
+tigresse
+tonnerre
+tonnerre de Brest
+tonnerre de tonnerre de Brest
+topinambour
+tortionnaire
+trafiquant de chair humaine
+traîne-potence
+traître
+tricheur
+troglodyte
+trompe-la-mort
+troufignol
+vampire
+vandale
+va-nu-pieds
+vaurien
+végétarien
+ver de terre
+Vercingétorix de carnaval
+vermicelles
+vermine
+vieille baderne
+vieille branche
+vieille coque rouillée
+vieille marmotte
+vieille perruche bavarde
+vieux farceur
+vieux frère
+vieux rafiot que je suis
+vipère
+vivisectionniste
+volatile de malheur
+voleur
+voleur d'enfants
+Wisigoths
 Zapotèques
-Zèbre
-Zigomars
-Zouave
-Zouave interplanétaire
-Zoulous
+zèbre
+zigomar
+zouave
+zouave interplanétaire
+zouave à la noix de coco
+Zoulou
+# Chevalier François de Hadoque
+anthropopithèque
+flibustier
+flibustier de carnaval
+mes agneaux
+moule à gaufres
+particulier
+perroquet bavard
+pirate d'eau douce
+que le grand cric me croque
+sinapisme
+tonnerre de Brest
+vieux cachalot
+vieux cornichon
