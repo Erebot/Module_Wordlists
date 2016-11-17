@@ -179,13 +179,13 @@ class Erebot_Module_Wordlists_Converter
      *      to create.
      *
      * \warning
-     *      If the file already existed and contained
-     *      tables named "metadata" or "words", they
-     *      will be overwritten with new data without
-     *      any warning.
+     *      If the file already existed, it is overwritten
+     *      with new data without any warning.
      */
     protected function _createDb($file)
     {
+        @unlink($file);
+
         $this->_db = new PDO("sqlite:$file");
         $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
