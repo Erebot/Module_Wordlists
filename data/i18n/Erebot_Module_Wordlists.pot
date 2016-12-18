@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Erebot_Module_Wordlists 0.1.0\n"
+"Project-Id-Version: Erebot_Module_Wordlists 1.0.x-dev\n"
 "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-"POT-Creation-Date: 2012-05-28 13:13+0200\n"
+"POT-Creation-Date: 2016-12-18 11:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 #
-# File: src/Erebot/Module/Wordlists.php, line: 109
+# File: src/Wordlists.php, line: 90
 msgid ""
 "This module does not provide any command, but provides lists of words for "
 "other modules to use."

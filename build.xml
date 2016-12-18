@@ -42,6 +42,4 @@
     </target>
 
     <import file="vendor/erebot/buildenv/build.xml"/>
-
-    <target name="extract_messages"/>
 </project>
