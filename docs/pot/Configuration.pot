@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_Wordlists package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_Wordlists 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-30 00:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/Configuration.rst:10
+msgid "Configuration"
+msgstr ""
+
+#: ../src/Configuration.rst:15
+msgid "Options"
+msgstr ""
+
+#: ../src/Configuration.rst:17
+msgid "This module provides a single configuration option."
+msgstr ""
+
+#: ../src/Configuration.rst:0
+msgid "Options for |project|"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Name"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Type"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Default value"
+msgstr ""
+
+#: ../src/Configuration.rst:22
+msgid "Description"
+msgstr ""
+
+#: ../src/Configuration.rst:24
+msgid "policy"
+msgstr ""
+
+#: ../src/Configuration.rst:24
+msgid "string"
+msgstr ""
+
+#: ../src/Configuration.rst:24
+msgid "'*' (allow any installed wordlist to be used)"
+msgstr ""
+
+#: ../src/Configuration.rst:24
+msgid "A space-separated list of (case-insensitive) patterns indicating the names of the wordlists that may or may not be used."
+msgstr ""
+
+#: ../src/Configuration.rst:30
+msgid "You may use ``?`` and ``*`` as wildcards to match exactly one character and one or more characters (respectively). You may also prefix a pattern with ``!`` to reject wordlists that match that pattern."
+msgstr ""
+
+#: ../src/Configuration.rst:39
+msgid "The patterns are evaluated in the order they were given. Wordlists that do not match any of the patterns are allowed for use (as if they had matched an implicit ``*`` pattern)."
+msgstr ""
+
+#: ../src/Configuration.rst:49
+msgid "Example"
+msgstr ""
+
+#: ../src/Configuration.rst:51
+msgid "The recommended way to use this module is to have it loaded at the general configuration level and to disable it only for specific networks. In the following example, the module was set up to allow the use of wordlists whose name starts with 'pkmn', but reject any other wordlist."
+msgstr ""
+
