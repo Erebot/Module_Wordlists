@@ -1,26 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-#
-# Translators:
-# Automatically generated, 2012.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Erebot\n"
+"Project-Id-Version: Erebot_Module_Wordlists 1.0.x-dev\n"
 "Report-Msgid-Bugs-To: i18n@erebot.net\n"
-"POT-Creation-Date: 2012-05-28 13:13+0200\n"
-"PO-Revision-Date: 2012-05-28 11:56+0000\n"
-"Last-Translator: François Poirotte <clicky@erebot.net>\n"
-"Language-Team: French (France) <i18n.fr_FR@erebot.net>\n"
-"Language: fr_FR\n"
+"POT-Creation-Date: 2016-12-31 14:34+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: François Poirotte <clicky@erebot.net>, 2016\n"
+"Language-Team: French (France) (https://www.transifex.com/erebot/teams/1675/fr_FR/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-#
-# File: src/Erebot/Module/Wordlists.php, line: 109
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# File: src/Wordlists.php, line: 90
 msgid ""
-"This module does not provide any command, but provides lists of words for "
-"other modules to use."
+"This module does not provide any command, but provides lists of words that "
+"other modules may use."
 msgstr ""
 "Ce module ne fournit aucune commande, mais fournit des listes de mots "
 "utilisables par les autres modules."

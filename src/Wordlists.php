@@ -88,7 +88,7 @@ class Wordlists extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpEn
         if (count($words) == 1 && $words[0] === get_called_class()) {
             $msg = $this->getFormatter($chan)->_(
                 "This module does not provide any command, but ".
-                "provides lists of words for other modules to use."
+                "provides lists of words that other modules may use."
             );
             $this->sendMessage($target, $msg);
             return true;
