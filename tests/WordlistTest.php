@@ -29,7 +29,7 @@ extends \Erebot\Module\Wordlists\Wordlist
 }
 
 class   WordlistTest
-extends PHPUnit_Framework_TestCase
+extends \PHPUnit\Framework\TestCase
 {
     const U_LATIN_SMALL_LETTER_A_WITH_GRAVE         = "\xC3\xA0";   // U+00E0
     const U_LATIN_SMALL_LETTER_C_WITH_CEDILLA       = "\xC3\xA7";   // U+00E7
