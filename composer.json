@@ -18,7 +18,7 @@
         "source": "https://github.com/Erebot/Module_Wordlists"
     },
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=7.0",
         "ext-PDO": "*",
         "ext-pdo_sqlite": "*",
         "ext-intl": "*",
