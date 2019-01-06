@@ -28,13 +28,13 @@ namespace Erebot\Module;
 class Wordlists extends \Erebot\Module\Base implements \Erebot\Interfaces\HelpEnabled
 {
     /// List of registered paths where wordlists are kept.
-    static protected $paths = array();
+    protected static $paths = array();
 
     /// A cache with available wordlists, based on currently registered paths.
-    static protected $cache = null;
+    protected static $cache = null;
 
     /// Ref-counted cache of wordlists.
-    static protected $refs  = array();
+    protected static $refs  = array();
 
     /**
      * This method is called whenever the module is (re)loaded.
